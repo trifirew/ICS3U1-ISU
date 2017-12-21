@@ -8,16 +8,45 @@ This is a Flappy Bird game made using JFrame.
  */
 
 /**
- * The main game class
+ * The main game class of Flappy Bird
  *
  * @author Keisun, Yitian
+ * @version 0.1
  * @since December 20, 2017
- * @version 0
  */
 public class FlappyBird {
 
+	public static FlappyBirdFrame frame;
+	public static MainMenuPanel mainMenuPanel;
+	public static GamePanel gamePanel;
+
+	public static final int WIDTH = 480;
+	public static final int HEIGHT = 800;
+
 	public static void main(String[] args) {
-		FlappyBirdFrame frame = new FlappyBirdFrame();
+		frame = new FlappyBirdFrame();
+		mainMenuPanel = new MainMenuPanel();
+		gamePanel = new GamePanel();
 		frame.setVisible(true);
+		frame.showPanel(mainMenuPanel);
+//		frame.showPanel(gamePanel);
+	}
+
+	/**
+	 * Generate a random integer between a and b inclusively.
+	 *
+	 * @param a lower bound of the random integer
+	 * @param b higher bound of the random integer
+	 * @return a random integer
+	 */
+	public static int rand(int a, int b) {
+		return (int) (Math.random() * (b - a + 1) + a);
+	}
+
+	public static void delay(int ms) {
+		try {
+			Thread.sleep(ms);
+		} catch (InterruptedException e) {
+		}
 	}
 }
