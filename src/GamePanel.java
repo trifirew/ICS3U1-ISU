@@ -1,110 +1,63 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 
 /**
  * The game screen
  *
  * @author Keisun, Yitian
- * @version 0
+ * @version 0.3
  * @since December 20, 2017
  */
 public class GamePanel extends JPanel {
 
-	private final int WIDTH = 480;
-	private final int HEIGHT = 800;
+	private final int WIDTH = FlappyBird.WIDTH;
+	private final int HEIGHT = FlappyBird.HEIGHT;
 
-	private Tube[] tubes = {new Tube(480 + 120), new Tube(480 + 240 + 44 + 120)};
-	private Bird bird = new Bird();
+	private GameControl game;
 
 	private Image offScreenI;
 	private Graphics offScreenG;
-	private Timer tubeTimer, birdTimer;
-
+	
+	JLabel scoreLabel;
+	
 	/**
 	 * Construct the panel for the actual game. Set up the tubes.
 	 */
 	public GamePanel() {
-		setPreferredSize(new Dimension(480, 800));
-
-		tubeTimer = new Timer(5, new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				for (Tube tube : tubes) {
-					tube.moveLeft();
-					if (tube.collide(bird)) {
-						tubeTimer.stop();
-						birdTimer.stop();
-					}
-				}
-				repaint();
-			}
-		});
-		
-		birdTimer = new Timer(5, new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				bird.fall();
-				if (bird.hitBorder()) {
-					tubeTimer.stop();
-					birdTimer.stop();
-				}
-				for (Tube tube : tubes) {
-					bird.earnScore(tube);
-				}
-			}
-		});
-		tubeTimer.start();
-		birdTimer.start();
-		
-		KeyListener keyListener = new KeyListener() {
+		setPreferredSize(new Dimension(WIDTH, HEIGHT));
+		SpringLayout layout = new SpringLayout();
+		setLayout(layout);
+		scoreLabel = new JLabel("0");
+		layout.putConstraint(SpringLayout.NORTH, scoreLabel, 48, SpringLayout.NORTH, this);
+		layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, scoreLabel, 0, SpringLayout.HORIZONTAL_CENTER, this);
+		add(scoreLabel);
+		// Set KeyListener
+		setFocusable(true);
+		addKeyListener(new KeyListener() {
 			@Override
 			public void keyTyped(KeyEvent e) {
-				System.out.println("Key");
 			}
 
 			@Override
 			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-					bird.jump();
-				}
+				if (e.getKeyCode() == KeyEvent.VK_SPACE)
+					game.bird.jump();
 			}
 
 			@Override
 			public void keyReleased(KeyEvent e) {
-
 			}
-		};
+		});
+	}
 
-		MouseListener mouseListener = new MouseListener() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-			}
+	public void start() {
+		game = new GameControl();
 
-			@Override
-			public void mousePressed(MouseEvent e) {
-				bird.jump();
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-
-			}
-		};
-		
-		setFocusable(true);
-		addKeyListener(keyListener);
-		addMouseListener(mouseListener);
+		requestFocusInWindow();
+		// Display score when playing
+		scoreLabel.setVisible(true);
 	}
 
 	@Override
@@ -115,12 +68,100 @@ public class GamePanel extends JPanel {
 		}
 		offScreenG.clearRect(0, 0, WIDTH, HEIGHT);
 
-		for (Tube tube : tubes) {
+		for (Tube tube : game.tubes) {
 			tube.draw(offScreenG);
 		}
-		bird.draw(offScreenG);
-		bird.drawScore(offScreenG);
+		game.bird.draw(offScreenG);
 
 		g.drawImage(offScreenI, 0, 0, this);
+	}
+
+	public BufferedImage createBI() {
+		BufferedImage bi = new BufferedImage(FlappyBird.WIDTH, FlappyBird.HEIGHT, BufferedImage.TYPE_INT_RGB);
+		Graphics2D g = bi.createGraphics();
+		paint(g);
+		return bi;
+	}
+}
+
+class GameControl {
+
+	Tube[] tubes = {new Tube(480 + 120), new Tube(480 + 240 + 44 + 120)};
+	Bird bird = new Bird();
+	int score;
+
+	private Timer tubeTimer = new Timer(5, new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			for (Tube tube : tubes) {
+				tube.moveLeft();
+				if (collide(bird, tube)) {
+					gameover();
+				}
+			}
+			checkScore();
+			FlappyBird.gamePanel.repaint();
+		}
+	});
+
+	private Timer birdTimer = new Timer(20, new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			bird.fall();
+			System.out.println(bird.speed);
+			if (bird.hitBorder()) {
+				GameControl.this.gameover();
+			}
+		}
+	});
+
+	public GameControl() {
+		score = 0;
+		tubeTimer.start();
+		birdTimer.start();
+	}
+
+	/**
+	 * Check if the Tube collides with the Bird.
+	 *
+	 * @param bird the Bird object to check
+	 * @return true if collide occurs
+	 */
+	public boolean collide(Bird bird, Tube tube) {
+		if (tube.x > bird.x + bird.width || tube.x + tube.width < bird.x) {
+			return false;
+		}
+		if (bird.y <= tube.gapY || bird.y + bird.height >= tube.gapY + 200) {
+			return true;
+		}
+		return false;
+	}
+
+	private void checkScore() {
+		for (Tube tube : tubes) {
+			if (!tube.passed && bird.x + bird.width >= tube.x + tube.width) {
+				tube.passed = true;
+				score++;
+			}
+		}
+		FlappyBird.gamePanel.scoreLabel.setText(Integer.toString(score));
+	}
+
+	private void gameover() {
+		tubeTimer.stop();
+		birdTimer.stop();
+		FlappyBird.gamePanel.scoreLabel.setVisible(false);
+		FlappyBird.frame.changePanel(FlappyBird.gamePanel, FlappyBird.scorePanel);
+		FlappyBird.scorePanel.start(this, FlappyBird.gamePanel.createBI());
+	}
+
+	/**
+	 * Draw the score on the screen.
+	 *
+	 * @param g the Graphics object to draw on
+	 */
+	public void drawScore(Graphics g) {
+		// TODO: Better appearance
+		g.drawString("" + score, 240, 100);
 	}
 }

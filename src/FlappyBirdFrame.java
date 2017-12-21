@@ -22,7 +22,7 @@ public class FlappyBirdFrame extends JFrame {
 	 */
 	public FlappyBirdFrame() {
 		super("Flappy Bird");
-		setResizable(false);
+//		setResizable(false);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		// Set action when player tries to close the window
 		addWindowListener(new WindowAdapter() {

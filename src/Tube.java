@@ -9,8 +9,10 @@ public class Tube {
 	int x;
 	int gapY;
 	int width = 88;
-	int height = FlappyBird.HEIGHT;
-	int speed = 1;
+	int gapHeight = 200;
+	private int totalHeight = FlappyBird.HEIGHT;
+	private int speed = 1;
+	boolean passed;
 
 	/**
 	 * Construct a new Tube.
@@ -20,6 +22,7 @@ public class Tube {
 	public Tube(int x) {
 		this.x = x;
 		gapY = FlappyBird.rand(150, 450);
+		passed = false;
 	}
 
 	/**
@@ -27,26 +30,11 @@ public class Tube {
 	 */
 	public void moveLeft() {
 		x -= speed;
-		if (x + 88 < 0) {
+		if (x + width < 0) {
 			x = FlappyBird.WIDTH;
 			gapY = FlappyBird.rand(150, 450);
+			passed = false;
 		}
-	}
-
-	/**
-	 * Check if the Tube collides with the Bird.
-	 *
-	 * @param bird the Bird object to check
-	 * @return true if collide occurs
-	 */
-	public boolean collide(Bird bird) {
-		if (x > bird.x + bird.width || x + width < bird.x) {
-			return false;
-		}
-		if (bird.y <= gapY || bird.y + bird.height >= gapY + 200) {
-			return true;
-		}
-		return false;
 	}
 
 	/**
@@ -62,14 +50,14 @@ public class Tube {
 		// The nozzle of the upper tube
 		g.fillRect(x, gapY - 40, width, 40);
 		// The lower tube
-		g.fillRect(x + 10, gapY + 240, width - 20, height - (gapY + 240));
+		g.fillRect(x + 10, gapY + gapHeight + 40, width - 20, totalHeight - (gapY + gapHeight + 40));
 		// The nozzle of the lower tube
-		g.fillRect(x, gapY + 200, width, 40);
+		g.fillRect(x, gapY + gapHeight, width, 40);
 		// Draw the border lines
 		g.setColor(Color.BLACK);
 		g.drawRect(x + 10, 0, width - 20, gapY - 40);
 		g.drawRect(x, gapY - 40, width, 40);
-		g.drawRect(x + 10, gapY + 240, width - 20, height - (gapY + 240));
-		g.drawRect(x, gapY + 200, width, 40);
+		g.drawRect(x + 10, gapY + gapHeight + 40, width - 20, totalHeight - (gapY + gapHeight + 40));
+		g.drawRect(x, gapY + gapHeight, width, 40);
 	}
 }

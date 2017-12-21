@@ -19,6 +19,7 @@ public class FlappyBird {
 	public static FlappyBirdFrame frame;
 	public static MainMenuPanel mainMenuPanel;
 	public static GamePanel gamePanel;
+	public static ScorePanel scorePanel;
 
 	public static final int WIDTH = 480;
 	public static final int HEIGHT = 800;
@@ -27,9 +28,9 @@ public class FlappyBird {
 		frame = new FlappyBirdFrame();
 		mainMenuPanel = new MainMenuPanel();
 		gamePanel = new GamePanel();
+		scorePanel = new ScorePanel();
 		frame.setVisible(true);
 		frame.showPanel(mainMenuPanel);
-//		frame.showPanel(gamePanel);
 	}
 
 	/**

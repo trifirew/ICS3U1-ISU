@@ -2,8 +2,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
 
 /**
  * The main menu screen
@@ -17,8 +15,6 @@ public class MainMenuPanel extends JPanel {
 	private final String ACTION_PLAY = "Play";
 	private final String ACTION_LEADER = "Leaderboard";
 
-	private Font fontTitle = new Font("Impact", Font.PLAIN, 48);
-
 	private JButton btnPlay, btnLeaderboard;
 	private JLabel lbTitle;
 
@@ -28,12 +24,14 @@ public class MainMenuPanel extends JPanel {
 
 		lbTitle = new JLabel("Flappy Bird");
 		lbTitle.setAlignmentX(CENTER_ALIGNMENT);
+		Font fontTitle = new Font("Impact", Font.PLAIN, 48);
 		lbTitle.setFont(fontTitle);
-		
+
 		btnPlay = new JButton(ACTION_PLAY);
 		btnPlay.setAlignmentX(CENTER_ALIGNMENT);
 		btnPlay.setPreferredSize(new Dimension(200, 50));
 		btnPlay.setMaximumSize(new Dimension(200, 50));
+		
 		btnLeaderboard = new JButton(ACTION_LEADER);
 		btnLeaderboard.setAlignmentX(CENTER_ALIGNMENT);
 		btnLeaderboard.setPreferredSize(new Dimension(200, 50));
@@ -46,8 +44,8 @@ public class MainMenuPanel extends JPanel {
 				switch (e.getActionCommand()) {
 					case ACTION_PLAY:
 						System.out.println("Play");
-						GamePanel panel = new GamePanel();
-						FlappyBird.frame.changePanel(MainMenuPanel.this, panel);
+						FlappyBird.frame.changePanel(MainMenuPanel.this, FlappyBird.gamePanel);
+						FlappyBird.gamePanel.start();
 						break;
 					case ACTION_LEADER:
 						System.out.println("Leaderboard");
@@ -65,5 +63,4 @@ public class MainMenuPanel extends JPanel {
 		add(btnLeaderboard);
 		add(Box.createRigidArea(new Dimension(0, 200)));
 	}
-	
 }
