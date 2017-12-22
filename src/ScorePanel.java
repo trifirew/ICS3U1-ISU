@@ -10,7 +10,7 @@ import java.io.IOException;
  * The score screen after a game is over
  *
  * @author Keisun, Yitian
- * @version 0.3
+ * @version 0.4
  * @since December 21, 2017
  */
 public class ScorePanel extends JPanel {

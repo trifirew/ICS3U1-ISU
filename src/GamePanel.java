@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
  * The game screen
  *
  * @author Keisun, Yitian
- * @version 0.3.1
+ * @version 0.4
  * @since December 20, 2017
  */
 public class GamePanel extends JPanel {
@@ -99,7 +99,7 @@ public class GamePanel extends JPanel {
  * This class controls the moving of the objects on the screen, and checks for collision and other events in the game.
  * 
  * @author Keisun, Yitian
- * @version 0.3.1
+ * @version 0.4
  * @since December 21, 2017
  */
 class GameControl {

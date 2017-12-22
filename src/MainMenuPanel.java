@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
  * The main menu screen
  *
  * @author Keisun, Yitian
- * @version 0.1
+ * @version 0.4
  * @since December 20, 2017
  */
 public class MainMenuPanel extends JPanel {
