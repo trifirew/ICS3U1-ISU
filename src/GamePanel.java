@@ -45,6 +45,7 @@ public class GamePanel extends JPanel {
 				if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 					if (!game.started) {
 						game.startMoving();
+						scoreLabel.setText("");
 						scoreLabel.setFont(fontScore);
 					}
 					game.bird.jump();
@@ -61,12 +62,12 @@ public class GamePanel extends JPanel {
 	 * Action when the panel is shown on screen. Initialize the screen.
 	 */
 	public void onShow() {
-		game = new GameControl();
-		requestFocusInWindow();
 		// Display score when playing
 		scoreLabel.setVisible(true);
 		scoreLabel.setText("Press SPACE to start");
 		scoreLabel.setFont(fontHint);
+		game = new GameControl();
+		requestFocusInWindow();
 	}
 
 	@Override

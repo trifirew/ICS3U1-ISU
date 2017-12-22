@@ -94,7 +94,7 @@ class ScoreCard extends JPanel {
 		setBackground(Color.CYAN);
 
 		Font fontScore = FlappyBird.fontBase.deriveFont(32f);
-		Font fontCaption = FlappyBird.fontBase.deriveFont(24f);
+		Font fontCaption = FlappyBird.fontBase.deriveFont(20f);
 
 		JLabel lbScoreCaption = new JLabel("Score");
 		lbScoreCaption.setFont(fontCaption);
