@@ -1,7 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
 /**
@@ -12,70 +10,68 @@ import java.awt.image.BufferedImage;
  */
 public class ScorePanel extends JPanel {
 
-	private BufferedImage image;
+	/**
+	 * Screenshot of previous game
+	 */
+	private BufferedImage gameImage;
 
 	private ScoreCard scoreCard;
-	private JButton btnRestart, btnLeaderboard;
 
-	private final String ACTION_PLAY = "Play";
-	private final String ACTION_LEADER = "Leaderboard";
-	
-	private Font fontButton;
-
+	/**
+	 * Construct the screen to display score.
+	 */
 	public ScorePanel() {
-		setPreferredSize(new Dimension(480, 800));
-		setBackground(Color.blue);
+		setPreferredSize(new Dimension(FlappyBird.W, FlappyBird.H));
 		SpringLayout layout = new SpringLayout();
 		setLayout(layout);
 
-		fontButton = FlappyBird.fontBase.deriveFont(14f);
+		Font fontButton = FlappyBird.fontBase.deriveFont(14f);
 
 		scoreCard = new ScoreCard();
 		layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, scoreCard, 0, SpringLayout.HORIZONTAL_CENTER, this);
 		layout.putConstraint(SpringLayout.VERTICAL_CENTER, scoreCard, 0, SpringLayout.VERTICAL_CENTER, this);
-		btnRestart = new JButton(ACTION_PLAY);
+
+		JButton btnRestart = new JButton("Play");
 		btnRestart.setFont(fontButton);
 		layout.putConstraint(SpringLayout.NORTH, btnRestart, 16, SpringLayout.SOUTH, scoreCard);
 		layout.putConstraint(SpringLayout.WEST, btnRestart, 0, SpringLayout.WEST, scoreCard);
 		layout.putConstraint(SpringLayout.EAST, btnRestart, -12, SpringLayout.HORIZONTAL_CENTER, this);
-		btnLeaderboard = new JButton(ACTION_LEADER);
+
+		JButton btnLeaderboard = new JButton("Leaderboard");
 		btnLeaderboard.setFont(fontButton);
 		layout.putConstraint(SpringLayout.NORTH, btnLeaderboard, 16, SpringLayout.SOUTH, scoreCard);
 		layout.putConstraint(SpringLayout.EAST, btnLeaderboard, 0, SpringLayout.EAST, scoreCard);
 		layout.putConstraint(SpringLayout.WEST, btnLeaderboard, 12, SpringLayout.HORIZONTAL_CENTER, this);
 
-		// Create an ActionListener for the buttons
-		ActionListener listener = new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				switch (e.getActionCommand()) {
-					case ACTION_PLAY:
-						System.out.println("Play");
-						FlappyBird.frame.changePanel(ScorePanel.this, FlappyBird.gamePanel);
-						FlappyBird.gamePanel.start();
-						break;
-					case ACTION_LEADER:
-						System.out.println("Leaderboard");
-				}
-			}
-		};
+		// Create ActionListeners for the buttons
+		btnRestart.addActionListener(e -> {
+			System.out.println("Play");
+			FlappyBird.frame.changePanel(ScorePanel.this, FlappyBird.gamePanel);
+			FlappyBird.gamePanel.onShow();
+		});
+		btnLeaderboard.addActionListener(e -> {
+			// TODO: Leaderboard screen
+			System.out.println("Leaderboard");
+		});
 
-		btnRestart.addActionListener(listener);
-		btnLeaderboard.addActionListener(listener);
-
+		// Add the components
 		add(scoreCard);
 		add(btnRestart);
 		add(btnLeaderboard);
 	}
 
-	public void start(GameControl game, BufferedImage image) {
-		this.image = image;
+	/**
+	 * Action when the panel is shown on screen. Initialize the screen.
+	 */
+	public void onShow(GameControl game, BufferedImage image) {
+		this.gameImage = image;
 		scoreCard.lbScore.setText(Integer.toString(game.score));
 	}
 
 	@Override
 	protected void paintComponent(Graphics g) {
-		g.drawImage(image, 0, 0, this);
+		// Draw the previous game screen as background
+		g.drawImage(gameImage, 0, 0, this);
 	}
 }
 
@@ -86,20 +82,21 @@ public class ScorePanel extends JPanel {
  * @since December 21, 2017
  */
 class ScoreCard extends JPanel {
-	JLabel lbScoreCaption, lbBestCaption, lbScore, lbBest;
 
-	private Font fontCaption;
-	private Font fontScore;
+	JLabel lbScore, lbBest;
 
-	public ScoreCard() {
+	/**
+	 * Construct the card to display scores.
+	 */
+	ScoreCard() {
 		SpringLayout layout = new SpringLayout();
 		setLayout(layout);
 		setBackground(Color.CYAN);
 
-		fontScore = FlappyBird.fontBase.deriveFont(32f);
-		fontCaption = FlappyBird.fontBase.deriveFont(24f);
+		Font fontScore = FlappyBird.fontBase.deriveFont(32f);
+		Font fontCaption = FlappyBird.fontBase.deriveFont(24f);
 
-		lbScoreCaption = new JLabel("Score");
+		JLabel lbScoreCaption = new JLabel("Score");
 		lbScoreCaption.setFont(fontCaption);
 		lbScoreCaption.setHorizontalTextPosition(SwingConstants.RIGHT);
 		layout.putConstraint(SpringLayout.EAST, lbScoreCaption, -16, SpringLayout.EAST, this);
@@ -111,7 +108,7 @@ class ScoreCard extends JPanel {
 		layout.putConstraint(SpringLayout.EAST, lbScore, 0, SpringLayout.EAST, lbScoreCaption);
 		layout.putConstraint(SpringLayout.NORTH, lbScore, 4, SpringLayout.SOUTH, lbScoreCaption);
 
-		lbBestCaption = new JLabel("Best");
+		JLabel lbBestCaption = new JLabel("Best");
 		lbBestCaption.setFont(fontCaption);
 		lbBestCaption.setHorizontalTextPosition(SwingConstants.RIGHT);
 		layout.putConstraint(SpringLayout.EAST, lbBestCaption, -16, SpringLayout.EAST, this);

@@ -18,15 +18,19 @@ import java.io.IOException;
  * @since December 20, 2017
  */
 public class FlappyBird {
-
+	
+	// The panels used in the game as different screens
 	public static FlappyBirdFrame frame;
 	public static MainMenuPanel mainMenuPanel;
 	public static GamePanel gamePanel;
 	public static ScorePanel scorePanel;
+
+	/**
+	 * The dimension of the game window
+ 	 */
+	public static final int W = 480, H = 800;
 	
-	public static final int WIDTH = 480;
-	public static final int HEIGHT = 800;
-	
+	// Base font of the game, used to derive different sizes
 	public static Font fontBase;
 
 	public static void main(String[] args) {
@@ -39,7 +43,10 @@ public class FlappyBird {
 		frame.setVisible(true);
 		frame.showPanel(mainMenuPanel);
 	}
-	
+
+	/**
+	 * Set up the base fonts from font resource files.
+	 */
 	private static void setupFonts() {
 		try {
 			fontBase = Font.createFont(Font.TRUETYPE_FONT, new File("res/minecraftia.ttf"));

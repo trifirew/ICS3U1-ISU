@@ -11,24 +11,21 @@ import java.awt.image.BufferedImage;
  */
 public class GamePanel extends JPanel {
 
-	private final int WIDTH = FlappyBird.WIDTH;
-	private final int HEIGHT = FlappyBird.HEIGHT;
-
 	private GameControl game;
 
 	private Image offScreenI;
 	private Graphics offScreenG;
-	
-	JLabel scoreLabel;
 
 	private Font fontScore = FlappyBird.fontBase.deriveFont(36f);
 	private Font fontHint = FlappyBird.fontBase.deriveFont(18f);
 	
+	JLabel scoreLabel;
+
 	/**
 	 * Construct the panel for the actual game. Set up the tubes.
 	 */
 	public GamePanel() {
-		setPreferredSize(new Dimension(WIDTH, HEIGHT));
+		setPreferredSize(new Dimension(FlappyBird.W, FlappyBird.H));
 		SpringLayout layout = new SpringLayout();
 		setLayout(layout);
 		scoreLabel = new JLabel("Press SPACE to start");
@@ -60,7 +57,10 @@ public class GamePanel extends JPanel {
 		});
 	}
 
-	public void start() {
+	/**
+	 * Action when the panel is shown on screen. Initialize the screen.
+	 */
+	public void onShow() {
 		game = new GameControl();
 		requestFocusInWindow();
 		// Display score when playing
@@ -72,10 +72,10 @@ public class GamePanel extends JPanel {
 	@Override
 	protected void paintComponent(Graphics g) {
 		if (offScreenG == null) {
-			offScreenI = createImage(WIDTH, HEIGHT);
+			offScreenI = createImage(FlappyBird.W, FlappyBird.H);
 			offScreenG = offScreenI.getGraphics();
 		}
-		offScreenG.clearRect(0, 0, WIDTH, HEIGHT);
+		offScreenG.clearRect(0, 0, FlappyBird.W, FlappyBird.H);
 
 		for (Tube tube : game.tubes) {
 			tube.draw(offScreenG);
@@ -85,8 +85,13 @@ public class GamePanel extends JPanel {
 		g.drawImage(offScreenI, 0, 0, this);
 	}
 
+	/**
+	 * Create a BufferedImage (screenshot) of current screen.
+	 *
+	 * @return a BufferedImage of current screen
+	 */
 	public BufferedImage createBI() {
-		BufferedImage bi = new BufferedImage(FlappyBird.WIDTH, FlappyBird.HEIGHT, BufferedImage.TYPE_INT_RGB);
+		BufferedImage bi = new BufferedImage(FlappyBird.W, FlappyBird.H, BufferedImage.TYPE_INT_RGB);
 		Graphics2D g = bi.createGraphics();
 		paint(g);
 		return bi;
@@ -96,7 +101,7 @@ public class GamePanel extends JPanel {
 /**
  * GameControl class
  * This class controls the moving of the objects on the screen, and checks for collision and other events in the game.
- * 
+ *
  * @author Keisun, Yitian
  * @since December 21, 2017
  */
@@ -107,25 +112,18 @@ class GameControl {
 	int score;
 	boolean started;
 
-	// Set the Timer for the motion of the Tubes
-	private Timer tubeTimer = new Timer(5, e -> {
+	// Set the Timer for the motion of the Tubes and the Bird
+	private Timer motionTimer = new Timer(10, e -> {
 		for (Tube tube : tubes) {
 			tube.moveLeft();
-			if (collide(bird, tube)) {
-				gameover();
-			}
+			if (collide(bird, tube)) gameover();
 		}
-		checkScore();
-		FlappyBird.gamePanel.repaint();
-	});
-
-	// Set the Timer for the motion of the Bird
-	private Timer birdTimer = new Timer(10, e -> {
 		bird.fall();
 		System.out.println(bird.speed);
-		if (bird.hitBorder()) {
-			GameControl.this.gameover();
-		}
+		if (bird.hitBorder()) gameover();
+
+		checkScore();
+		FlappyBird.gamePanel.repaint();
 	});
 
 	/**
@@ -140,8 +138,7 @@ class GameControl {
 	 * Start moving the bird and the tubes after player press SPACE for the first time.
 	 */
 	public void startMoving() {
-		tubeTimer.start();
-		birdTimer.start();
+		motionTimer.start();
 		started = true;
 	}
 
@@ -155,10 +152,7 @@ class GameControl {
 		if (tube.x > bird.x + bird.width || tube.x + tube.width < bird.x) {
 			return false;
 		}
-		if (bird.y <= tube.gapY || bird.y + bird.height >= tube.gapY + 200) {
-			return true;
-		}
-		return false;
+		return (bird.y <= tube.gapY || bird.y + bird.height >= tube.gapY + 200);
 	}
 
 	/**
@@ -179,20 +173,10 @@ class GameControl {
 	 * Perform actions after the game is over.
 	 */
 	private void gameover() {
-		tubeTimer.stop();
-		birdTimer.stop();
+		motionTimer.stop();
 		FlappyBird.gamePanel.scoreLabel.setVisible(false);
 		FlappyBird.frame.changePanel(FlappyBird.gamePanel, FlappyBird.scorePanel);
-		FlappyBird.scorePanel.start(this, FlappyBird.gamePanel.createBI());
+		FlappyBird.scorePanel.onShow(this, FlappyBird.gamePanel.createBI());
 	}
 
-	/**
-	 * Draw the score on the screen.
-	 *
-	 * @param g the Graphics object to draw on
-	 */
-	public void drawScore(Graphics g) {
-		// TODO: Better appearance
-		g.drawString("" + score, 240, 100);
-	}
 }

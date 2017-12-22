@@ -1,7 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * The main menu screen
@@ -11,53 +9,42 @@ import java.awt.event.ActionListener;
  */
 public class MainMenuPanel extends JPanel {
 
-	private final String ACTION_PLAY = "Play";
-	private final String ACTION_LEADER = "Leaderboard";
-
-	private JButton btnPlay, btnLeaderboard;
-	private JLabel lbTitle;
-
+	/**
+	 * Construct the main menu screen.
+	 */
 	public MainMenuPanel() {
-		setPreferredSize(new Dimension(480, 800));
+		setPreferredSize(new Dimension(FlappyBird.W, FlappyBird.H));
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-		lbTitle = new JLabel("Flappy Bird");
+		JLabel lbTitle = new JLabel("Flappy Bird");
 		lbTitle.setAlignmentX(CENTER_ALIGNMENT);
 		Font fontTitle = FlappyBird.fontBase.deriveFont(48f);
 		lbTitle.setFont(fontTitle);
 
 		Font fontButton = FlappyBird.fontBase.deriveFont(18f);
 
-		btnPlay = new JButton(ACTION_PLAY);
+		JButton btnPlay = new JButton("Play");
 		btnPlay.setAlignmentX(CENTER_ALIGNMENT);
 		btnPlay.setPreferredSize(new Dimension(200, 50));
 		btnPlay.setMaximumSize(new Dimension(200, 50));
 		btnPlay.setFont(fontButton);
-		
-		btnLeaderboard = new JButton(ACTION_LEADER);
+
+		JButton btnLeaderboard = new JButton("Leaderboard");
 		btnLeaderboard.setAlignmentX(CENTER_ALIGNMENT);
 		btnLeaderboard.setPreferredSize(new Dimension(200, 50));
 		btnLeaderboard.setMaximumSize(new Dimension(200, 50));
 		btnLeaderboard.setFont(fontButton);
 
-		// Create an ActionListener for the buttons
-		ActionListener listener = new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				switch (e.getActionCommand()) {
-					case ACTION_PLAY:
-						System.out.println("Play");
-						FlappyBird.frame.changePanel(MainMenuPanel.this, FlappyBird.gamePanel);
-						FlappyBird.gamePanel.start();
-						break;
-					case ACTION_LEADER:
-						System.out.println("Leaderboard");
-				}
-			}
-		};
-
-		btnPlay.addActionListener(listener);
-		btnLeaderboard.addActionListener(listener);
+		// Add ActionListeners for the buttons
+		btnPlay.addActionListener(e -> {
+			System.out.println("Play");
+			FlappyBird.frame.changePanel(MainMenuPanel.this, FlappyBird.gamePanel);
+			FlappyBird.gamePanel.onShow();
+		});
+		btnLeaderboard.addActionListener(e -> {
+			// TODO: Leaderboard screen
+			System.out.println("Leaderboard");
+		});
 
 		add(Box.createRigidArea(new Dimension(0, 200)));
 		add(lbTitle);

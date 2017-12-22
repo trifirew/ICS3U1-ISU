@@ -8,9 +8,9 @@ public class Bird {
 
 	int x, y;
 	int width, height;
-	double speed;
-	private double jumpSpeed = -6;
-	private double gravity = 0.225;
+	float speed;
+	private float jumpSpeed = -7.2f;
+	private float gravity = 0.256f;
 	
 	/**
 	 * Construct the Bird object in the game.
@@ -19,12 +19,12 @@ public class Bird {
 		width = 32;
 		height = 32;
 		x = 120;
-		y = (FlappyBird.HEIGHT - height) / 2;
+		y = (FlappyBird.H - height) / 2;
 		speed = 0;
 	}
 
 	/**
-	 * Make the bird fall to the ground.
+	 * Make the Bird fall to the ground.
 	 */
 	public void fall() {
 		y += speed;
@@ -32,7 +32,7 @@ public class Bird {
 	}
 
 	/**
-	 * Make the bird jumps.
+	 * Make the Bird jump.
 	 */
 	public void jump() {
 		speed = jumpSpeed;
@@ -44,7 +44,7 @@ public class Bird {
 	 * @return true if the Bird hit the border
 	 */
 	public boolean hitBorder() {
-		return y + height >= FlappyBird.HEIGHT;
+		return y + height >= FlappyBird.H;
 	}
 
 	/**

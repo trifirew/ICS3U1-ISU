@@ -38,10 +38,10 @@ public class FlappyBirdFrame extends JFrame {
 		Toolkit tk = Toolkit.getDefaultToolkit();
 		setIconImage(tk.getImage("res/icon.png"));
 		Dimension screenSize = tk.getScreenSize();
-		
-		int width = FlappyBird.WIDTH;
-		int height = FlappyBird.HEIGHT;
-		setBounds((screenSize.width - width) / 2, (screenSize.height - height) / 2, width, height);
+
+		int w = FlappyBird.W;
+		int h = FlappyBird.H;
+		setBounds((screenSize.width - w) / 2, (screenSize.height - h) / 2, w, h);
 	}
 
 	/**
