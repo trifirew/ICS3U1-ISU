@@ -43,21 +43,28 @@ public class Tube {
 	 */
 	public void draw(Graphics g) {
 		// Draw the tubes
-		g.setColor(Color.GREEN);
+		int h = FlappyBird.HEIGHT;
 		// The upper tube
-		g.fillRect(x + 10, 0, width - 20, gapY - 40);
+		fillRectWithBorder(g, x + 10, 0, width - 20, gapY - 40);
 		// The nozzle of the upper tube
-		g.fillRect(x, gapY - 40, width, 40);
+		fillRectWithBorder(g, x, gapY - 40, width, 40);
 		// The lower tube
-		int totalHeight = FlappyBird.HEIGHT;
-		g.fillRect(x + 10, gapY + gapHeight + 40, width - 20, totalHeight - (gapY + gapHeight + 40));
+		fillRectWithBorder(g, x + 10, gapY + gapHeight + 40, width - 20, h - (gapY + gapHeight + 40));
 		// The nozzle of the lower tube
-		g.fillRect(x, gapY + gapHeight, width, 40);
-		// Draw the border lines
+		fillRectWithBorder(g, x, gapY + gapHeight, width, 40);
+	}
+
+	/**
+	 * Draw a filled rectangle with border
+	 *
+	 * @param g            the Graphics object to draw on
+	 * @param x,y          the coordinates of the upper-left corner of the rectangle
+	 * @param width,height the width and height of the rectangle
+	 */
+	private void fillRectWithBorder(Graphics g, int x, int y, int width, int height) {
+		g.setColor(Color.GREEN);
+		g.fillRect(x, y, width, height);
 		g.setColor(Color.BLACK);
-		g.drawRect(x + 10, 0, width - 20, gapY - 40);
-		g.drawRect(x, gapY - 40, width, 40);
-		g.drawRect(x + 10, gapY + gapHeight + 40, width - 20, totalHeight - (gapY + gapHeight + 40));
-		g.drawRect(x, gapY + gapHeight, width, 40);
+		g.drawRect(x, y, width, height);
 	}
 }

@@ -122,7 +122,7 @@ class GameControl {
 	});
 
 	// Set the Timer for the motion of the Bird
-	private Timer birdTimer = new Timer(20, e -> {
+	private Timer birdTimer = new Timer(10, e -> {
 		bird.fall();
 		System.out.println(bird.speed);
 		if (bird.hitBorder()) {
