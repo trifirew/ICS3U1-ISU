@@ -20,7 +20,7 @@ public class FlappyBird {
 	public static MainMenuPanel mainMenuPanel;
 	public static GamePanel gamePanel;
 	public static ScorePanel scorePanel;
-
+	
 	public static final int WIDTH = 480;
 	public static final int HEIGHT = 800;
 

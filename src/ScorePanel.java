@@ -3,10 +3,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * The score screen after a game is over
- * 
+ *
  * @author Keisun, Yitian
  * @version 0.3
  * @since December 21, 2017
@@ -20,7 +22,7 @@ public class ScorePanel extends JPanel {
 
 	private final String ACTION_PLAY = "Play";
 	private final String ACTION_LEADER = "Leaderboard";
-
+	
 	public ScorePanel() {
 		setPreferredSize(new Dimension(480, 800));
 		setBackground(Color.blue);
@@ -76,7 +78,7 @@ public class ScorePanel extends JPanel {
 
 /**
  * The card to show the player score and best score.
- * 
+ *
  * @author Keisun, Yitian
  * @version 0.3
  * @since December 21, 2017
@@ -84,41 +86,51 @@ public class ScorePanel extends JPanel {
 class ScoreCard extends JPanel {
 	JLabel lbScoreCaption, lbBestCaption, lbScore, lbBest;
 
-	private Font fontCaption = new Font("Trebuchet MS", Font.PLAIN, 24);
-	private Font fontScore = new Font("Impact", Font.PLAIN, 36);
+	private Font fontBase;
+	private Font fontCaption;
+	private Font fontScore;
 
 	public ScoreCard() {
 		SpringLayout layout = new SpringLayout();
 		setLayout(layout);
 		setBackground(Color.CYAN);
 
+		try {
+			fontBase = Font.createFont(Font.TRUETYPE_FONT, new File("res/minecraftia.ttf"));
+			GraphicsEnvironment genv = GraphicsEnvironment.getLocalGraphicsEnvironment();
+			genv.registerFont(fontBase);
+			// Derive the size
+			fontScore = fontBase.deriveFont(Font.PLAIN, 32f);
+			fontCaption = fontBase.deriveFont(Font.PLAIN, 24f);
+		} catch (FontFormatException | IOException e) {
+			e.printStackTrace();
+		}
+
 		lbScoreCaption = new JLabel("Score");
 		lbScoreCaption.setFont(fontCaption);
-		lbScoreCaption.setHorizontalTextPosition(SwingConstants.LEFT);
-		System.out.println(lbScoreCaption.getPreferredSize());
-		layout.putConstraint(SpringLayout.WEST, lbScoreCaption, 16, SpringLayout.WEST, this);
+		lbScoreCaption.setHorizontalTextPosition(SwingConstants.RIGHT);
+		layout.putConstraint(SpringLayout.EAST, lbScoreCaption, -16, SpringLayout.EAST, this);
 		layout.putConstraint(SpringLayout.NORTH, lbScoreCaption, 16, SpringLayout.NORTH, this);
-		
+
 		lbScore = new JLabel("0");
 		lbScore.setFont(fontScore);
-		lbScore.setHorizontalTextPosition(SwingConstants.LEFT);
-		layout.putConstraint(SpringLayout.WEST, lbScore, 16, SpringLayout.WEST, lbScoreCaption);
+		lbScore.setHorizontalTextPosition(SwingConstants.RIGHT);
+		layout.putConstraint(SpringLayout.EAST, lbScore, 0, SpringLayout.EAST, lbScoreCaption);
 		layout.putConstraint(SpringLayout.NORTH, lbScore, 4, SpringLayout.SOUTH, lbScoreCaption);
 
 		lbBestCaption = new JLabel("Best");
 		lbBestCaption.setFont(fontCaption);
-		lbBestCaption.setHorizontalTextPosition(SwingConstants.LEFT);
-		System.out.println(lbBestCaption.getPreferredSize());
-		layout.putConstraint(SpringLayout.WEST, lbBestCaption, 16, SpringLayout.WEST, this);
+		lbBestCaption.setHorizontalTextPosition(SwingConstants.RIGHT);
+		layout.putConstraint(SpringLayout.EAST, lbBestCaption, -16, SpringLayout.EAST, this);
 		layout.putConstraint(SpringLayout.NORTH, lbBestCaption, 16, SpringLayout.SOUTH, lbScore);
-
 
 		lbBest = new JLabel("0");
 		lbBest.setFont(fontScore);
-		lbBest.setHorizontalTextPosition(SwingConstants.LEFT);
-		lbBest.setMaximumSize(lbBest.getPreferredSize());
-		layout.putConstraint(SpringLayout.WEST, lbBest, 16, SpringLayout.WEST, lbBestCaption);
+		lbBest.setHorizontalTextPosition(SwingConstants.RIGHT);
+		layout.putConstraint(SpringLayout.EAST, lbBest, 0, SpringLayout.EAST, lbBestCaption);
 		layout.putConstraint(SpringLayout.NORTH, lbBest, 4, SpringLayout.SOUTH, lbBestCaption);
+
+		// Make the size of the card fit the contents
 		layout.putConstraint(SpringLayout.SOUTH, this, 16, SpringLayout.SOUTH, lbBest);
 
 		add(lbScoreCaption);
