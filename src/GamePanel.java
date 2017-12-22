@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
  * The game screen
  *
  * @author Keisun, Yitian
- * @version 0.3
+ * @version 0.3.1
  * @since December 20, 2017
  */
 public class GamePanel extends JPanel {
@@ -29,7 +29,7 @@ public class GamePanel extends JPanel {
 		setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		SpringLayout layout = new SpringLayout();
 		setLayout(layout);
-		scoreLabel = new JLabel("0");
+		scoreLabel = new JLabel("Press SPACE to start");
 		layout.putConstraint(SpringLayout.NORTH, scoreLabel, 48, SpringLayout.NORTH, this);
 		layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, scoreLabel, 0, SpringLayout.HORIZONTAL_CENTER, this);
 		add(scoreLabel);
@@ -42,8 +42,12 @@ public class GamePanel extends JPanel {
 
 			@Override
 			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_SPACE)
+				if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+					if (!game.started) {
+						game.startMoving();
+					}
 					game.bird.jump();
+				}
 			}
 
 			@Override
@@ -54,10 +58,10 @@ public class GamePanel extends JPanel {
 
 	public void start() {
 		game = new GameControl();
-
 		requestFocusInWindow();
 		// Display score when playing
 		scoreLabel.setVisible(true);
+		scoreLabel.setText("Press SPACE to start");
 	}
 
 	@Override
@@ -84,11 +88,20 @@ public class GamePanel extends JPanel {
 	}
 }
 
+/**
+ * GameControl class
+ * This class controls the moving of the objects on the screen, and checks for collision and other events in the game.
+ * 
+ * @author Keisun, Yitian
+ * @version 0.3.1
+ * @since December 21, 2017
+ */
 class GameControl {
 
 	Tube[] tubes = {new Tube(480 + 120), new Tube(480 + 240 + 44 + 120)};
 	Bird bird = new Bird();
 	int score;
+	boolean started;
 
 	private Timer tubeTimer = new Timer(5, new ActionListener() {
 		@Override
@@ -117,8 +130,16 @@ class GameControl {
 
 	public GameControl() {
 		score = 0;
+		started = false;
+	}
+
+	/**
+	 * Start moving the bird and the tubes after player press SPACE for the first time.
+	 */
+	public void startMoving() {
 		tubeTimer.start();
 		birdTimer.start();
+		started = true;
 	}
 
 	/**
