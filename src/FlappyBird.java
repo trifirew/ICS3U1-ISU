@@ -15,7 +15,6 @@ import java.io.IOException;
  * The main game class of Flappy Bird
  *
  * @author Keisun, Yitian
- * @version 0.4
  * @since December 20, 2017
  */
 public class FlappyBird {

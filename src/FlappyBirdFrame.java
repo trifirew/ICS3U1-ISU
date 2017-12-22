@@ -7,7 +7,6 @@ import java.awt.event.WindowEvent;
  * The frame of the game
  *
  * @author Keisun, Yitian
- * @version 0.1.1
  * @since December 20, 2017
  */
 public class FlappyBirdFrame extends JFrame {

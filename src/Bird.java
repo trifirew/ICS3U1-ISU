@@ -44,9 +44,7 @@ public class Bird {
 	 * @return true if the Bird hit the border
 	 */
 	public boolean hitBorder() {
-		if (y + height >= FlappyBird.HEIGHT)
-			return true;
-		return false;
+		return y + height >= FlappyBird.HEIGHT;
 	}
 
 	/**

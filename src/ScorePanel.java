@@ -3,14 +3,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 /**
  * The score screen after a game is over
  *
  * @author Keisun, Yitian
- * @version 0.4
  * @since December 21, 2017
  */
 public class ScorePanel extends JPanel {
@@ -86,7 +83,6 @@ public class ScorePanel extends JPanel {
  * The card to show the player score and best score.
  *
  * @author Keisun, Yitian
- * @version 0.3
  * @since December 21, 2017
  */
 class ScoreCard extends JPanel {
