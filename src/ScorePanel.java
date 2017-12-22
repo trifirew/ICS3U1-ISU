@@ -23,20 +23,26 @@ public class ScorePanel extends JPanel {
 	private final String ACTION_PLAY = "Play";
 	private final String ACTION_LEADER = "Leaderboard";
 	
+	private Font fontButton;
+
 	public ScorePanel() {
 		setPreferredSize(new Dimension(480, 800));
 		setBackground(Color.blue);
 		SpringLayout layout = new SpringLayout();
 		setLayout(layout);
 
+		fontButton = FlappyBird.fontBase.deriveFont(14f);
+
 		scoreCard = new ScoreCard();
 		layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, scoreCard, 0, SpringLayout.HORIZONTAL_CENTER, this);
 		layout.putConstraint(SpringLayout.VERTICAL_CENTER, scoreCard, 0, SpringLayout.VERTICAL_CENTER, this);
 		btnRestart = new JButton(ACTION_PLAY);
+		btnRestart.setFont(fontButton);
 		layout.putConstraint(SpringLayout.NORTH, btnRestart, 16, SpringLayout.SOUTH, scoreCard);
 		layout.putConstraint(SpringLayout.WEST, btnRestart, 0, SpringLayout.WEST, scoreCard);
 		layout.putConstraint(SpringLayout.EAST, btnRestart, -12, SpringLayout.HORIZONTAL_CENTER, this);
 		btnLeaderboard = new JButton(ACTION_LEADER);
+		btnLeaderboard.setFont(fontButton);
 		layout.putConstraint(SpringLayout.NORTH, btnLeaderboard, 16, SpringLayout.SOUTH, scoreCard);
 		layout.putConstraint(SpringLayout.EAST, btnLeaderboard, 0, SpringLayout.EAST, scoreCard);
 		layout.putConstraint(SpringLayout.WEST, btnLeaderboard, 12, SpringLayout.HORIZONTAL_CENTER, this);
@@ -86,7 +92,6 @@ public class ScorePanel extends JPanel {
 class ScoreCard extends JPanel {
 	JLabel lbScoreCaption, lbBestCaption, lbScore, lbBest;
 
-	private Font fontBase;
 	private Font fontCaption;
 	private Font fontScore;
 
@@ -95,16 +100,8 @@ class ScoreCard extends JPanel {
 		setLayout(layout);
 		setBackground(Color.CYAN);
 
-		try {
-			fontBase = Font.createFont(Font.TRUETYPE_FONT, new File("res/minecraftia.ttf"));
-			GraphicsEnvironment genv = GraphicsEnvironment.getLocalGraphicsEnvironment();
-			genv.registerFont(fontBase);
-			// Derive the size
-			fontScore = fontBase.deriveFont(Font.PLAIN, 32f);
-			fontCaption = fontBase.deriveFont(Font.PLAIN, 24f);
-		} catch (FontFormatException | IOException e) {
-			e.printStackTrace();
-		}
+		fontScore = FlappyBird.fontBase.deriveFont(32f);
+		fontCaption = FlappyBird.fontBase.deriveFont(24f);
 
 		lbScoreCaption = new JLabel("Score");
 		lbScoreCaption.setFont(fontCaption);

@@ -24,18 +24,22 @@ public class MainMenuPanel extends JPanel {
 
 		lbTitle = new JLabel("Flappy Bird");
 		lbTitle.setAlignmentX(CENTER_ALIGNMENT);
-		Font fontTitle = new Font("Impact", Font.PLAIN, 48);
+		Font fontTitle = FlappyBird.fontBase.deriveFont(48f);
 		lbTitle.setFont(fontTitle);
+
+		Font fontButton = FlappyBird.fontBase.deriveFont(18f);
 
 		btnPlay = new JButton(ACTION_PLAY);
 		btnPlay.setAlignmentX(CENTER_ALIGNMENT);
 		btnPlay.setPreferredSize(new Dimension(200, 50));
 		btnPlay.setMaximumSize(new Dimension(200, 50));
+		btnPlay.setFont(fontButton);
 		
 		btnLeaderboard = new JButton(ACTION_LEADER);
 		btnLeaderboard.setAlignmentX(CENTER_ALIGNMENT);
 		btnLeaderboard.setPreferredSize(new Dimension(200, 50));
 		btnLeaderboard.setMaximumSize(new Dimension(200, 50));
+		btnLeaderboard.setFont(fontButton);
 
 		// Create an ActionListener for the buttons
 		ActionListener listener = new ActionListener() {

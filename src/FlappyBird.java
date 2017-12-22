@@ -7,6 +7,10 @@ Flappy Bird
 This is a Flappy Bird game made using JFrame.
  */
 
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+
 /**
  * The main game class of Flappy Bird
  *
@@ -23,8 +27,12 @@ public class FlappyBird {
 	
 	public static final int WIDTH = 480;
 	public static final int HEIGHT = 800;
+	
+	public static Font fontBase;
 
 	public static void main(String[] args) {
+		setupFonts();
+		
 		frame = new FlappyBirdFrame();
 		mainMenuPanel = new MainMenuPanel();
 		gamePanel = new GamePanel();
@@ -32,16 +40,15 @@ public class FlappyBird {
 		frame.setVisible(true);
 		frame.showPanel(mainMenuPanel);
 	}
-
-	/**
-	 * Generate a random integer between a and b inclusively.
-	 *
-	 * @param a lower bound of the random integer
-	 * @param b higher bound of the random integer
-	 * @return a random integer
-	 */
-	public static int rand(int a, int b) {
-		return (int) (Math.random() * (b - a + 1) + a);
+	
+	private static void setupFonts() {
+		try {
+			fontBase = Font.createFont(Font.TRUETYPE_FONT, new File("res/minecraftia.ttf"));
+			GraphicsEnvironment genv = GraphicsEnvironment.getLocalGraphicsEnvironment();
+			genv.registerFont(fontBase);
+		} catch (FontFormatException | IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -54,5 +61,16 @@ public class FlappyBird {
 			Thread.sleep(ms);
 		} catch (InterruptedException ignored) {
 		}
+	}
+
+	/**
+	 * Generate a random integer between a and b inclusively.
+	 *
+	 * @param a lower bound of the random integer
+	 * @param b higher bound of the random integer
+	 * @return a random integer
+	 */
+	public static int rand(int a, int b) {
+		return (int) (Math.random() * (b - a + 1) + a);
 	}
 }

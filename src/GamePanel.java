@@ -21,6 +21,9 @@ public class GamePanel extends JPanel {
 	private Graphics offScreenG;
 	
 	JLabel scoreLabel;
+
+	private Font fontScore = FlappyBird.fontBase.deriveFont(36f);
+	private Font fontHint = FlappyBird.fontBase.deriveFont(18f);
 	
 	/**
 	 * Construct the panel for the actual game. Set up the tubes.
@@ -30,7 +33,8 @@ public class GamePanel extends JPanel {
 		SpringLayout layout = new SpringLayout();
 		setLayout(layout);
 		scoreLabel = new JLabel("Press SPACE to start");
-		layout.putConstraint(SpringLayout.NORTH, scoreLabel, 48, SpringLayout.NORTH, this);
+		scoreLabel.setFont(fontHint);
+		layout.putConstraint(SpringLayout.NORTH, scoreLabel, 96, SpringLayout.NORTH, this);
 		layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, scoreLabel, 0, SpringLayout.HORIZONTAL_CENTER, this);
 		add(scoreLabel);
 		// Set KeyListener
@@ -45,6 +49,7 @@ public class GamePanel extends JPanel {
 				if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 					if (!game.started) {
 						game.startMoving();
+						scoreLabel.setFont(fontScore);
 					}
 					game.bird.jump();
 				}
@@ -62,6 +67,7 @@ public class GamePanel extends JPanel {
 		// Display score when playing
 		scoreLabel.setVisible(true);
 		scoreLabel.setText("Press SPACE to start");
+		scoreLabel.setFont(fontHint);
 	}
 
 	@Override
