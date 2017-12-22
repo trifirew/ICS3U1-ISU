@@ -9,8 +9,7 @@ public class Tube {
 	int x;
 	int gapY;
 	int width = 88;
-	int gapHeight = 200;
-	private int totalHeight = FlappyBird.HEIGHT;
+	private int gapHeight = 200;
 	private int speed = 1;
 	boolean passed;
 
@@ -50,6 +49,7 @@ public class Tube {
 		// The nozzle of the upper tube
 		g.fillRect(x, gapY - 40, width, 40);
 		// The lower tube
+		int totalHeight = FlappyBird.HEIGHT;
 		g.fillRect(x + 10, gapY + gapHeight + 40, width - 20, totalHeight - (gapY + gapHeight + 40));
 		// The nozzle of the lower tube
 		g.fillRect(x, gapY + gapHeight, width, 40);

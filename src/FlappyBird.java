@@ -44,10 +44,15 @@ public class FlappyBird {
 		return (int) (Math.random() * (b - a + 1) + a);
 	}
 
+	/**
+	 * Delay for a given number of milliseconds.
+	 *
+	 * @param ms time period to delay
+	 */
 	public static void delay(int ms) {
 		try {
 			Thread.sleep(ms);
-		} catch (InterruptedException e) {
+		} catch (InterruptedException ignored) {
 		}
 	}
 }

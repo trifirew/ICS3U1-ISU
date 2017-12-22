@@ -7,24 +7,20 @@ import java.awt.event.WindowEvent;
  * The frame of the game
  *
  * @author Keisun, Yitian
- * @version 0.1
+ * @version 0.1.1
  * @since December 20, 2017
  */
 public class FlappyBirdFrame extends JFrame {
-
-	private Toolkit tk = Toolkit.getDefaultToolkit();
-
-	private final int WIDTH = FlappyBird.WIDTH;
-	private final int HEIGHT = FlappyBird.HEIGHT;
 
 	/**
 	 * Construct a new frame for the game.
 	 */
 	public FlappyBirdFrame() {
 		super("Flappy Bird");
-//		setResizable(false);
-		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		// Prevent player from changing the size of the window
+		setResizable(false);
 		// Set action when player tries to close the window
+		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -40,9 +36,13 @@ public class FlappyBirdFrame extends JFrame {
 			}
 		});
 		// Set icon of the window
+		Toolkit tk = Toolkit.getDefaultToolkit();
 		setIconImage(tk.getImage("res/icon.png"));
 		Dimension screenSize = tk.getScreenSize();
-		setBounds((screenSize.width - WIDTH) / 2, (screenSize.height - HEIGHT) / 2, WIDTH, HEIGHT);
+		
+		int width = FlappyBird.WIDTH;
+		int height = FlappyBird.HEIGHT;
+		setBounds((screenSize.width - width) / 2, (screenSize.height - height) / 2, width, height);
 	}
 
 	/**

@@ -103,32 +103,31 @@ class GameControl {
 	int score;
 	boolean started;
 
-	private Timer tubeTimer = new Timer(5, new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			for (Tube tube : tubes) {
-				tube.moveLeft();
-				if (collide(bird, tube)) {
-					gameover();
-				}
+	// Set the Timer for the motion of the Tubes
+	private Timer tubeTimer = new Timer(5, e -> {
+		for (Tube tube : tubes) {
+			tube.moveLeft();
+			if (collide(bird, tube)) {
+				gameover();
 			}
-			checkScore();
-			FlappyBird.gamePanel.repaint();
+		}
+		checkScore();
+		FlappyBird.gamePanel.repaint();
+	});
+
+	// Set the Timer for the motion of the Bird
+	private Timer birdTimer = new Timer(20, e -> {
+		bird.fall();
+		System.out.println(bird.speed);
+		if (bird.hitBorder()) {
+			GameControl.this.gameover();
 		}
 	});
 
-	private Timer birdTimer = new Timer(20, new ActionListener() {
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			bird.fall();
-			System.out.println(bird.speed);
-			if (bird.hitBorder()) {
-				GameControl.this.gameover();
-			}
-		}
-	});
-
-	public GameControl() {
+	/**
+	 * Start a new game.
+	 */
+	GameControl() {
 		score = 0;
 		started = false;
 	}
@@ -148,7 +147,7 @@ class GameControl {
 	 * @param bird the Bird object to check
 	 * @return true if collide occurs
 	 */
-	public boolean collide(Bird bird, Tube tube) {
+	private boolean collide(Bird bird, Tube tube) {
 		if (tube.x > bird.x + bird.width || tube.x + tube.width < bird.x) {
 			return false;
 		}
@@ -158,6 +157,9 @@ class GameControl {
 		return false;
 	}
 
+	/**
+	 * Check if the Bird pass a tube.
+	 */
 	private void checkScore() {
 		for (Tube tube : tubes) {
 			if (!tube.passed && bird.x + bird.width >= tube.x + tube.width) {
@@ -168,6 +170,10 @@ class GameControl {
 		FlappyBird.gamePanel.scoreLabel.setText(Integer.toString(score));
 	}
 
+	/**
+	 * When the Bird hits something, the game is over.
+	 * Perform actions after the game is over.
+	 */
 	private void gameover() {
 		tubeTimer.stop();
 		birdTimer.stop();

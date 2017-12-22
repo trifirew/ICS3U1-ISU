@@ -9,9 +9,8 @@ public class Bird {
 	int x, y;
 	int width, height;
 	double speed;
-	double jumpSpeed = -12;
-	double gravity = 0.9;
-	int score;
+	private double jumpSpeed = -12;
+	private double gravity = 0.9;
 	
 	/**
 	 * Construct the Bird object in the game.
@@ -22,7 +21,6 @@ public class Bird {
 		x = 120;
 		y = (FlappyBird.HEIGHT - height) / 2;
 		speed = 0;
-		score = 0;
 	}
 
 	/**
