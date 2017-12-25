@@ -18,7 +18,7 @@ public class GamePanel extends JPanel {
 
 	private Font fontScore = FlappyBird.fontBase.deriveFont(36f);
 	private Font fontHint = FlappyBird.fontBase.deriveFont(18f);
-	
+
 	JLabel scoreLabel;
 
 	/**
@@ -33,6 +33,7 @@ public class GamePanel extends JPanel {
 		layout.putConstraint(SpringLayout.NORTH, scoreLabel, 96, SpringLayout.NORTH, this);
 		layout.putConstraint(SpringLayout.HORIZONTAL_CENTER, scoreLabel, 0, SpringLayout.HORIZONTAL_CENTER, this);
 		add(scoreLabel);
+
 		// Set KeyListener
 		setFocusable(true);
 		addKeyListener(new KeyListener() {
@@ -78,11 +79,12 @@ public class GamePanel extends JPanel {
 		}
 		offScreenG.clearRect(0, 0, FlappyBird.W, FlappyBird.H);
 
+		offScreenG.drawImage(FlappyBird.bg, 0, 0, this);
+
 		for (Tube tube : game.tubes) {
 			tube.draw(offScreenG);
 		}
 		game.bird.draw(offScreenG);
-
 		g.drawImage(offScreenI, 0, 0, this);
 	}
 
@@ -111,16 +113,22 @@ class GameControl {
 	Tube[] tubes = {new Tube(480 + 120), new Tube(480 + 240 + 44 + 120)};
 	Bird bird = new Bird();
 	int score;
+	int life;
 	boolean started;
 
 	// Set the Timer for the motion of the Tubes and the Bird
 	private Timer motionTimer = new Timer(10, e -> {
 		for (Tube tube : tubes) {
 			tube.moveLeft();
-			if (collide(bird, tube)) gameover();
+			if (collide(bird, tube) && !tube.passed) {
+				life--;
+				if (life == 0) gameover();
+				tube.gapY = -1;
+				tube.gapHeight = FlappyBird.H;
+				tube.passed = true;
+			}
 		}
 		bird.fall();
-		System.out.println(bird.speed);
 		if (bird.hitBorder()) gameover();
 
 		checkScore();
@@ -132,6 +140,7 @@ class GameControl {
 	 */
 	GameControl() {
 		score = 0;
+		life = 1;
 		started = false;
 	}
 
@@ -153,7 +162,7 @@ class GameControl {
 		if (tube.x > bird.x + bird.width || tube.x + tube.width < bird.x) {
 			return false;
 		}
-		return (bird.y <= tube.gapY || bird.y + bird.height >= tube.gapY + 200);
+		return (bird.y <= tube.gapY || bird.y + bird.height >= tube.gapY + tube.gapHeight);
 	}
 
 	/**

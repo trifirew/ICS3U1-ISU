@@ -20,6 +20,7 @@ public class MainMenuPanel extends JPanel {
 		lbTitle.setAlignmentX(CENTER_ALIGNMENT);
 		Font fontTitle = FlappyBird.fontBase.deriveFont(48f);
 		lbTitle.setFont(fontTitle);
+		lbTitle.setForeground(Color.DARK_GRAY);
 
 		Font fontButton = FlappyBird.fontBase.deriveFont(18f);
 
@@ -46,11 +47,18 @@ public class MainMenuPanel extends JPanel {
 			System.out.println("Leaderboard");
 		});
 
-		add(Box.createRigidArea(new Dimension(0, 200)));
+		add(Box.createRigidArea(new Dimension(0, 152)));
 		add(lbTitle);
 		add(Box.createVerticalGlue());
 		add(btnPlay);
 		add(btnLeaderboard);
-		add(Box.createRigidArea(new Dimension(0, 200)));
+		add(Box.createRigidArea(new Dimension(0, 324)));
+	}
+
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		// Draw the background image
+		g.drawImage(FlappyBird.bg, 0, 0, this);
 	}
 }
