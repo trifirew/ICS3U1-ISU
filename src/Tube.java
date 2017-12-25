@@ -6,21 +6,33 @@ import java.awt.*;
  */
 public class Tube {
 
+	/**
+	 * The Y-coordinate of the ground
+	 */
+	static final int GROUND = 613;
+
 	int x;
+	/**
+	 * The Y-coordinate of the top of the gap of the Tube
+	 */
 	int gapY;
 	int width = 88;
-	private int gapHeight = 200;
+	/**
+	 * The height of the gap of the Tube
+	 */
+	int gapHeight;
 	private int speed = 2;
 	boolean passed;
 
 	/**
 	 * Construct a new Tube.
 	 *
-	 * @param x the x coordinate where the Tube initially is at
+	 * @param x the X-coordinate where the Tube initially is at
 	 */
 	public Tube(int x) {
 		this.x = x;
-		gapY = FlappyBird.rand(150, 450);
+		gapHeight = 200;
+		gapY = FlappyBird.rand(50, GROUND - gapHeight - 50);
 		passed = false;
 	}
 
@@ -31,7 +43,8 @@ public class Tube {
 		x -= speed;
 		if (x + width < 0) {
 			x = FlappyBird.W;
-			gapY = FlappyBird.rand(150, 450);
+			gapHeight = 200;
+			gapY = FlappyBird.rand(50, GROUND - gapHeight - 50);
 			passed = false;
 		}
 	}
@@ -43,14 +56,13 @@ public class Tube {
 	 */
 	public void draw(Graphics g) {
 		// Draw the tubes
-		int h = FlappyBird.H;
 		g.setColor(Color.GREEN);
 		// The upper tube
 		g.fillRect(x + 10, 0, width - 20, gapY - 40);
 		// The nozzle of the upper tube
 		g.fillRect(x, gapY - 40, width, 40);
 		// The lower tube
-		g.fillRect(x + 10, gapY + gapHeight + 40, width - 20, h - (gapY + gapHeight + 40));
+		g.fillRect(x + 10, gapY + gapHeight + 40, width - 20, GROUND - (gapY + gapHeight + 40));
 		// The nozzle of the lower tube
 		g.fillRect(x, gapY + gapHeight, width, 40);
 		g.setColor(Color.BLACK);
@@ -59,7 +71,7 @@ public class Tube {
 		// The nozzle of the upper tube
 		g.drawRect(x, gapY - 40, width, 40);
 		// The lower tube
-		g.drawRect(x + 10, gapY + gapHeight + 40, width - 20, h - (gapY + gapHeight + 40));
+		g.drawRect(x + 10, gapY + gapHeight + 40, width - 20, GROUND - (gapY + gapHeight + 40));
 		// The nozzle of the lower tube
 		g.drawRect(x, gapY + gapHeight, width, 40);
 	}

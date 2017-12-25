@@ -18,7 +18,7 @@ import java.io.IOException;
  * @since December 20, 2017
  */
 public class FlappyBird {
-	
+
 	// The panels used in the game as different screens
 	public static FlappyBirdFrame frame;
 	public static MainMenuPanel mainMenuPanel;
@@ -27,16 +27,25 @@ public class FlappyBird {
 
 	/**
 	 * The dimension of the game window
- 	 */
+	 */
 	public static final int W = 480, H = 800;
-	
-	// Base font of the game, used to derive different sizes
+
+	/**
+	 * Base font of the game, used to derive different sizes
+	 */
 	public static Font fontBase;
 
+	/**
+	 * The background image of the game
+	 */
+	public static Image bg;
+
 	public static void main(String[] args) {
-		setupFonts();
-		
 		frame = new FlappyBirdFrame();
+
+		loadFonts();
+		loadBackground();
+
 		mainMenuPanel = new MainMenuPanel();
 		gamePanel = new GamePanel();
 		scorePanel = new ScorePanel();
@@ -45,15 +54,30 @@ public class FlappyBird {
 	}
 
 	/**
-	 * Set up the base fonts from font resource files.
+	 * Load the base fonts from font resource files.
 	 */
-	private static void setupFonts() {
+	private static void loadFonts() {
 		try {
 			fontBase = Font.createFont(Font.TRUETYPE_FONT, new File("res/minecraftia.ttf"));
-			GraphicsEnvironment genv = GraphicsEnvironment.getLocalGraphicsEnvironment();
-			genv.registerFont(fontBase);
+			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+			ge.registerFont(fontBase);
 		} catch (FontFormatException | IOException e) {
 			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Load the background image of the game.
+	 */
+	private static void loadBackground() {
+		MediaTracker tracker = new MediaTracker(frame);
+		bg = Toolkit.getDefaultToolkit().getImage("res/bg.png");
+		tracker.addImage(bg, 0);
+
+		//  Wait until all of the images are loaded
+		try {
+			tracker.waitForAll();
+		} catch (InterruptedException ignored) {
 		}
 	}
 
