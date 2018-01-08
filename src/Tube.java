@@ -16,13 +16,20 @@ public class Tube {
 	 * The Y-coordinate of the top of the gap of the Tube
 	 */
 	int gapY;
+	/**
+	 * The width of the Tube
+	 */
 	int width = 88;
 	/**
 	 * The height of the gap of the Tube
 	 */
 	int gapHeight;
-	private int speed = 2;
-	boolean passed;
+	/**
+	 * The moving speed of the Tube
+	 */
+	private int speed = 3;
+
+	boolean scored, crashed;
 
 	/**
 	 * Construct a new Tube.
@@ -33,7 +40,8 @@ public class Tube {
 		this.x = x;
 		gapHeight = 200;
 		gapY = FlappyBird.rand(50, GROUND - gapHeight - 50);
-		passed = false;
+		scored = false;
+		crashed = false;
 	}
 
 	/**
@@ -45,7 +53,7 @@ public class Tube {
 			x = FlappyBird.W;
 			gapHeight = 200;
 			gapY = FlappyBird.rand(50, GROUND - gapHeight - 50);
-			passed = false;
+			scored = false;
 		}
 	}
 

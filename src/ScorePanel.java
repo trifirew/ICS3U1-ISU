@@ -47,7 +47,7 @@ public class ScorePanel extends JPanel {
 		btnRestart.addActionListener(e -> {
 			System.out.println("Play");
 			FlappyBird.frame.changePanel(ScorePanel.this, FlappyBird.gamePanel);
-			FlappyBird.gamePanel.onShow();
+			FlappyBird.gamePanel.init();
 		});
 		btnLeaderboard.addActionListener(e -> {
 			// TODO: Leaderboard screen

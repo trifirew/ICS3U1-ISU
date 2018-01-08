@@ -32,13 +32,15 @@ public class GamePanel extends JPanel {
 		for (Tube tube : tubes) {
 			tube.moveLeft();
 			if (collide(bird, tube)) {
+				System.out.println("collide");
 				// Minus one life
-				if (!tube.passed) life--;
+				if (!tube.crashed) life--;
+				System.out.println(life);
 				if (life == 0) gameover();
 				// If player still have life, allow them to break the Tube once
 				tube.gapY = -1;
 				tube.gapHeight = FlappyBird.H;
-				tube.passed = true;
+				tube.crashed = true;
 			}
 		}
 		// Make the Bird free fall
@@ -49,7 +51,6 @@ public class GamePanel extends JPanel {
 
 		FlappyBird.gamePanel.repaint();
 	});
-
 
 	/**
 	 * Start moving the bird and the tubes after player press SPACE for the first time.
@@ -77,8 +78,8 @@ public class GamePanel extends JPanel {
 	 */
 	private void checkScore() {
 		for (Tube tube : tubes) {
-			if (!tube.passed && bird.x + bird.width >= tube.x + tube.width) {
-				tube.passed = true;
+			if (!tube.scored && bird.x + bird.width >= tube.x + tube.width) {
+				tube.scored = true;
 				score++;
 			}
 		}
@@ -137,7 +138,7 @@ public class GamePanel extends JPanel {
 	/**
 	 * Action when the panel is shown on screen. Initialize the screen.
 	 */
-	public void onShow() {
+	public void init() {
 		// Display score when playing
 		scoreLabel.setVisible(true);
 		scoreLabel.setText("Press SPACE to start");

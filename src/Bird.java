@@ -9,8 +9,8 @@ public class Bird {
 	int x, y;
 	int width, height;
 	float speed;
-	private float jumpSpeed = -7.2f;
-	private float gravity = 0.256f;
+	private float jumpSpeed = -8f;
+	private float gravity = 0.3f;
 
 	/**
 	 * Construct the Bird object in the game.

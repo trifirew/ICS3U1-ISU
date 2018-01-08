@@ -40,7 +40,7 @@ public class MainMenuPanel extends JPanel {
 		btnPlay.addActionListener(e -> {
 			System.out.println("Play");
 			FlappyBird.frame.changePanel(MainMenuPanel.this, FlappyBird.gamePanel);
-			FlappyBird.gamePanel.onShow();
+			FlappyBird.gamePanel.init();
 		});
 		btnLeaderboard.addActionListener(e -> {
 			// TODO: Leaderboard screen
