@@ -63,9 +63,9 @@ public class ScorePanel extends JPanel {
 	/**
 	 * Action when the panel is shown on screen. Initialize the screen.
 	 */
-	public void onShow(GameControl game, BufferedImage image) {
+	public void onShow(int score, BufferedImage image) {
 		this.gameImage = image;
-		scoreCard.lbScore.setText(Integer.toString(game.score));
+		scoreCard.lbScore.setText(Integer.toString(score));
 	}
 
 	@Override

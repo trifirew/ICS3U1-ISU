@@ -11,15 +11,90 @@ import java.awt.image.BufferedImage;
  */
 public class GamePanel extends JPanel {
 
-	private GameControl game;
-
+	// Offscreen buffer to avoid flickering
 	private Image offScreenI;
 	private Graphics offScreenG;
 
+	// UI variables
 	private Font fontScore = FlappyBird.fontBase.deriveFont(36f);
 	private Font fontHint = FlappyBird.fontBase.deriveFont(18f);
+	private JLabel scoreLabel;
 
-	JLabel scoreLabel;
+	// Game variables
+	private Tube[] tubes = {new Tube(480 + 120), new Tube(480 + 240 + 44 + 120)};
+	private Bird bird = new Bird();
+	private int score;
+	private int life;
+	private boolean started;
+
+	// Set the Timer for the motion of the Tubes and the Bird
+	private Timer motionTimer = new Timer(10, e -> {
+		for (Tube tube : tubes) {
+			tube.moveLeft();
+			if (collide(bird, tube)) {
+				// Minus one life
+				if (!tube.passed) life--;
+				if (life == 0) gameover();
+				// If player still have life, allow them to break the Tube once
+				tube.gapY = -1;
+				tube.gapHeight = FlappyBird.H;
+				tube.passed = true;
+			}
+		}
+		// Make the Bird free fall
+		bird.fall();
+		// Check if the Bird hit the ground
+		if (bird.hitBorder()) gameover();
+		checkScore();
+
+		FlappyBird.gamePanel.repaint();
+	});
+
+
+	/**
+	 * Start moving the bird and the tubes after player press SPACE for the first time.
+	 */
+	public void startMoving() {
+		motionTimer.start();
+		started = true;
+	}
+
+	/**
+	 * Check if the Tube collides with the Bird.
+	 *
+	 * @param bird the Bird object to check
+	 * @return true if collide occurs
+	 */
+	private boolean collide(Bird bird, Tube tube) {
+		if (tube.x > bird.x + bird.width || tube.x + tube.width < bird.x) {
+			return false;
+		}
+		return (bird.y <= tube.gapY || bird.y + bird.height >= tube.gapY + tube.gapHeight);
+	}
+
+	/**
+	 * Check if the Bird pass a Tube.
+	 */
+	private void checkScore() {
+		for (Tube tube : tubes) {
+			if (!tube.passed && bird.x + bird.width >= tube.x + tube.width) {
+				tube.passed = true;
+				score++;
+			}
+		}
+		scoreLabel.setText(Integer.toString(score));
+	}
+
+	/**
+	 * When the Bird hits something, the game is over.
+	 * Perform actions after the game is over.
+	 */
+	private void gameover() {
+		motionTimer.stop();
+		scoreLabel.setVisible(false);
+		FlappyBird.frame.changePanel(FlappyBird.gamePanel, FlappyBird.scorePanel);
+		FlappyBird.scorePanel.onShow(score, FlappyBird.gamePanel.createBI());
+	}
 
 	/**
 	 * Construct the panel for the actual game. Set up the tubes.
@@ -44,12 +119,12 @@ public class GamePanel extends JPanel {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-					if (!game.started) {
-						game.startMoving();
+					if (!started) {
+						startMoving();
 						scoreLabel.setText("");
 						scoreLabel.setFont(fontScore);
 					}
-					game.bird.jump();
+					bird.jump();
 				}
 			}
 
@@ -67,8 +142,12 @@ public class GamePanel extends JPanel {
 		scoreLabel.setVisible(true);
 		scoreLabel.setText("Press SPACE to start");
 		scoreLabel.setFont(fontHint);
-		game = new GameControl();
 		requestFocusInWindow();
+		tubes = new Tube[]{new Tube(480 + 120), new Tube(480 + 240 + 44 + 120)};
+		bird = new Bird();
+		score = 0;
+		life = 1;
+		started = false;
 	}
 
 	@Override
@@ -81,10 +160,10 @@ public class GamePanel extends JPanel {
 
 		offScreenG.drawImage(FlappyBird.bg, 0, 0, this);
 
-		for (Tube tube : game.tubes) {
+		for (Tube tube : tubes) {
 			tube.draw(offScreenG);
 		}
-		game.bird.draw(offScreenG);
+		bird.draw(offScreenG);
 		g.drawImage(offScreenI, 0, 0, this);
 	}
 
@@ -99,94 +178,4 @@ public class GamePanel extends JPanel {
 		paint(g);
 		return bi;
 	}
-}
-
-/**
- * GameControl class
- * This class controls the moving of the objects on the screen, and checks for collision and other events in the game.
- *
- * @author Keisun, Yitian
- * @since December 21, 2017
- */
-class GameControl {
-
-	Tube[] tubes = {new Tube(480 + 120), new Tube(480 + 240 + 44 + 120)};
-	Bird bird = new Bird();
-	int score;
-	int life;
-	boolean started;
-
-	// Set the Timer for the motion of the Tubes and the Bird
-	private Timer motionTimer = new Timer(10, e -> {
-		for (Tube tube : tubes) {
-			tube.moveLeft();
-			if (collide(bird, tube) && !tube.passed) {
-				life--;
-				if (life == 0) gameover();
-				tube.gapY = -1;
-				tube.gapHeight = FlappyBird.H;
-				tube.passed = true;
-			}
-		}
-		bird.fall();
-		if (bird.hitBorder()) gameover();
-
-		checkScore();
-		FlappyBird.gamePanel.repaint();
-	});
-
-	/**
-	 * Start a new game.
-	 */
-	GameControl() {
-		score = 0;
-		life = 1;
-		started = false;
-	}
-
-	/**
-	 * Start moving the bird and the tubes after player press SPACE for the first time.
-	 */
-	public void startMoving() {
-		motionTimer.start();
-		started = true;
-	}
-
-	/**
-	 * Check if the Tube collides with the Bird.
-	 *
-	 * @param bird the Bird object to check
-	 * @return true if collide occurs
-	 */
-	private boolean collide(Bird bird, Tube tube) {
-		if (tube.x > bird.x + bird.width || tube.x + tube.width < bird.x) {
-			return false;
-		}
-		return (bird.y <= tube.gapY || bird.y + bird.height >= tube.gapY + tube.gapHeight);
-	}
-
-	/**
-	 * Check if the Bird pass a tube.
-	 */
-	private void checkScore() {
-		for (Tube tube : tubes) {
-			if (!tube.passed && bird.x + bird.width >= tube.x + tube.width) {
-				tube.passed = true;
-				score++;
-			}
-		}
-		FlappyBird.gamePanel.scoreLabel.setText(Integer.toString(score));
-	}
-
-	/**
-	 * When the Bird hits something, the game is over.
-	 * Perform actions after the game is over.
-	 */
-	private void gameover() {
-		motionTimer.stop();
-		FlappyBird.gamePanel.scoreLabel.setVisible(false);
-		FlappyBird.frame.changePanel(FlappyBird.gamePanel, FlappyBird.scorePanel);
-		FlappyBird.scorePanel.onShow(this, FlappyBird.gamePanel.createBI());
-	}
-
 }

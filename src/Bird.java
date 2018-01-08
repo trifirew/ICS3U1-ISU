@@ -19,7 +19,7 @@ public class Bird {
 		width = 32;
 		height = 32;
 		x = 120;
-		y = (FlappyBird.H - height) / 2;
+		y = (Tube.GROUND - height) / 2;
 		speed = 0;
 	}
 
