@@ -18,6 +18,10 @@ import java.io.IOException;
  * @since December 20, 2017
  */
 public class FlappyBird {
+	/**
+	 * The dimension of the game window
+	 */
+	public static final int W = 480, H = 800;
 
 	// The panels used in the game as different screens
 	public static FlappyBirdFrame frame;
@@ -25,10 +29,6 @@ public class FlappyBird {
 	public static GamePanel gamePanel;
 	public static ScorePanel scorePanel;
 
-	/**
-	 * The dimension of the game window
-	 */
-	public static final int W = 480, H = 800;
 
 	/**
 	 * Base font of the game, used to derive different sizes
@@ -54,7 +54,7 @@ public class FlappyBird {
 	}
 
 	/**
-	 * Load the base fonts from font resource files.
+	 * Load the base fonts from font resource files. (Source: Internet)
 	 */
 	private static void loadFonts() {
 		try {

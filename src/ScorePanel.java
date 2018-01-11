@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
 /**
@@ -44,14 +46,20 @@ public class ScorePanel extends JPanel {
 		layout.putConstraint(SpringLayout.WEST, btnLeaderboard, 12, SpringLayout.HORIZONTAL_CENTER, this);
 
 		// Create ActionListeners for the buttons
-		btnRestart.addActionListener(e -> {
-			System.out.println("Play");
-			FlappyBird.frame.changePanel(ScorePanel.this, FlappyBird.gamePanel);
-			FlappyBird.gamePanel.init();
+		btnRestart.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Play");
+				FlappyBird.frame.changePanel(ScorePanel.this, FlappyBird.gamePanel);
+				FlappyBird.gamePanel.init();
+			}
 		});
-		btnLeaderboard.addActionListener(e -> {
-			// TODO: Leaderboard screen
-			System.out.println("Leaderboard");
+		btnLeaderboard.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO: Leaderboard screen
+				System.out.println("Leaderboard");
+			}
 		});
 
 		// Add the components

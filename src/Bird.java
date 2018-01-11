@@ -10,14 +10,14 @@ public class Bird {
 	int width, height;
 	float speed;
 	private float jumpSpeed = -8f;
-	private float gravity = 0.3f;
+	private float gravity = 0.32f;
 
 	/**
 	 * Construct the Bird object in the game.
 	 */
 	public Bird() {
-		width = 32;
-		height = 32;
+		width = 40;
+		height = 40;
 		x = 120;
 		y = (Tube.GROUND - height) / 2;
 		speed = 0;

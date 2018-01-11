@@ -28,28 +28,31 @@ public class GamePanel extends JPanel {
 	private boolean started;
 
 	// Set the Timer for the motion of the Tubes and the Bird
-	private Timer motionTimer = new Timer(10, e -> {
-		for (Tube tube : tubes) {
-			tube.moveLeft();
-			if (collide(bird, tube)) {
-				System.out.println("collide");
-				// Minus one life
-				if (!tube.crashed) life--;
-				System.out.println(life);
-				if (life == 0) gameover();
-				// If player still have life, allow them to break the Tube once
-				tube.gapY = -1;
-				tube.gapHeight = FlappyBird.H;
-				tube.crashed = true;
+	private Timer motionTimer = new Timer(10, new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			for (Tube tube : tubes) {
+				tube.moveLeft();
+				if (collide(bird, tube)) {
+					System.out.println("collide");
+					// Minus one life
+					if (!tube.crashed) life--;
+					System.out.println(life);
+					if (life == 0) gameover();
+					// If player still have life, allow them to break the Tube once
+					tube.gapY = -1;
+					tube.gapHeight = FlappyBird.H;
+					tube.crashed = true;
+				}
 			}
-		}
-		// Make the Bird free fall
-		bird.fall();
-		// Check if the Bird hit the ground
-		if (bird.hitBorder()) gameover();
-		checkScore();
+			// Make the Bird free fall
+			bird.fall();
+			// Check if the Bird hit the ground
+			if (bird.hitBorder()) gameover();
+			checkScore();
 
-		FlappyBird.gamePanel.repaint();
+			FlappyBird.gamePanel.repaint();
+		}
 	});
 
 	/**

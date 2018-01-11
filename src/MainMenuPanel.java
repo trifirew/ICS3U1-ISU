@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * The main menu screen
@@ -37,14 +39,20 @@ public class MainMenuPanel extends JPanel {
 		btnLeaderboard.setFont(fontButton);
 
 		// Add ActionListeners for the buttons
-		btnPlay.addActionListener(e -> {
-			System.out.println("Play");
-			FlappyBird.frame.changePanel(MainMenuPanel.this, FlappyBird.gamePanel);
-			FlappyBird.gamePanel.init();
+		btnPlay.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Play");
+				FlappyBird.frame.changePanel(MainMenuPanel.this, FlappyBird.gamePanel);
+				FlappyBird.gamePanel.init();
+			}
 		});
-		btnLeaderboard.addActionListener(e -> {
-			// TODO: Leaderboard screen
-			System.out.println("Leaderboard");
+		btnLeaderboard.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO: Leaderboard screen
+				System.out.println("Leaderboard");
+			}
 		});
 
 		add(Box.createRigidArea(new Dimension(0, 152)));
