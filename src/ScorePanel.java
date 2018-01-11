@@ -50,7 +50,7 @@ public class ScorePanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Play");
-				FlappyBird.frame.changePanel(ScorePanel.this, FlappyBird.gamePanel);
+				FlappyBird.changePanel(ScorePanel.this, FlappyBird.gamePanel);
 				FlappyBird.gamePanel.init();
 			}
 		});
@@ -71,7 +71,7 @@ public class ScorePanel extends JPanel {
 	/**
 	 * Action when the panel is shown on screen. Initialize the screen.
 	 */
-	public void onShow(int score, BufferedImage image) {
+	public void init(int score, BufferedImage image) {
 		this.gameImage = image;
 		scoreCard.lbScore.setText(Integer.toString(score));
 	}
@@ -143,36 +143,6 @@ class ScoreCard extends JPanel {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		drawHuaji(g, 32, 52);
+		GameUtil.drawHuaji(g, 32, 52);
 	}
-
-	/**
-	 * Draw a Huaji face.
-	 *
-	 * @param g   the Graphics object to draw on
-	 * @param x,y the coordinates of the top-left corner of the image
-	 */
-	public void drawHuaji(Graphics g, int x, int y) {
-		g.setColor(Color.YELLOW);
-		// Face
-		g.fillOval(x, y, 100, 100);
-		g.setColor(Color.DARK_GRAY);
-
-		g.drawArc(x + 8, y + 4, 24, 20, 0, 180);
-		g.drawArc(x + 68, y + 4, 24, 20, 0, 180);
-		// Eyes
-		g.drawArc(x + 4, y + 20, 36, 20, 0, 180);
-		g.drawArc(x + 60, y + 20, 36, 20, 0, 180);
-		g.drawArc(x + 4, y + 28, 36, 8, 0, 180);
-		g.drawArc(x + 60, y + 28, 36, 8, 0, 180);
-		g.fillOval(x + 8, y + 22, 8, 8);
-		g.fillOval(x + 64, y + 22, 8, 8);
-		g.setColor(Color.PINK);
-		g.fillOval(x + 6, y + 36, 28, 12);
-		g.fillOval(x + 66, y + 36, 28, 12);
-		// Mouth
-		g.setColor(Color.BLACK);
-		g.drawArc(x + 10, y + 20, 80, 70, 0, -180);
-	}
-
 }

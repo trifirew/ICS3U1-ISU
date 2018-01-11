@@ -21,34 +21,105 @@ public class GamePanel extends JPanel {
 	private JLabel scoreLabel;
 
 	// Game variables
-	private Tube[] tubes = {new Tube(480 + 120), new Tube(480 + 240 + 44 + 120)};
-	private Bird bird = new Bird();
+	/**
+	 * The current score of the player
+	 */
 	private int score;
+	/**
+	 * The number of lives left
+	 */
 	private int life;
+	/**
+	 * Whether the game is started
+	 */
 	private boolean started;
+	/**
+	 * The Y-coordinate of the ground of the game
+	 */
+	private final int GROUND = 613;
+	/**
+	 * The gravity of the game, related to acceleration
+	 */
+	private final double GRAVITY = 0.32;
+
+	// Bird
+	/**
+	 * The coordinates of the bird
+	 */
+	private int birdX, birdY;
+	/**
+	 * The dimension of the bird
+	 */
+	private int birdW = 40, birdH = 40;
+	/**
+	 * The speed of the bird
+	 */
+	private double birdSpeed;
+	/**
+	 * The speed of the bird when it jumps
+	 */
+	private double jumpSpeed = -8;
+
+	// Tubes
+	private int[] tubesX = new int[2];
+	/**
+	 * The Y-coordinate of the top of the gap of the tube
+	 */
+	private int[] tubesGapY = new int[2];
+	/**
+	 * The width of the tube
+	 */
+	private int tubeW = 88;
+	/**
+	 * The height of the gap of the tube
+	 */
+	private int[] tubesGapH = new int[2];
+	/**
+	 * The moving speed of the tube
+	 */
+	private int tubeSpeed = -3;
+	/**
+	 * Whether the bird already scored by passing the tube
+	 */
+	private boolean[] tubesScored = new boolean[2];
+	/**
+	 * Whether the bird already crashed on the tube
+	 */
+	private boolean[] tubesCrashed = new boolean[2];
 
 	// Set the Timer for the motion of the Tubes and the Bird
 	private Timer motionTimer = new Timer(10, new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			for (Tube tube : tubes) {
-				tube.moveLeft();
-				if (collide(bird, tube)) {
+			for (int i = 0; i < 2; i++) {
+				// Move the tubes left
+				tubesX[i] += tubeSpeed;
+				// If the tube goes pass the left border of the screen, move it to the right border of the screen
+				if (tubesX[i] + tubeW < 0) {
+					tubesX[i] = FlappyBird.W;
+					tubesGapH[i] = 200;
+					tubesGapY[i] = GameUtil.rand(50, GROUND - tubesGapH[i] - 50);
+					tubesScored[i] = false;
+				}
+				// Check if the bird crash on the tube
+				if (collide(i)) {
 					System.out.println("collide");
-					// Minus one life
-					if (!tube.crashed) life--;
+					// Reduce life by one after crash
+					if (!tubesCrashed[i]) life--;
 					System.out.println(life);
 					if (life == 0) gameover();
 					// If player still have life, allow them to break the Tube once
-					tube.gapY = -1;
-					tube.gapHeight = FlappyBird.H;
-					tube.crashed = true;
+					tubesGapY[i] = -1;
+					tubesGapH[i] = FlappyBird.H;
+					tubesCrashed[i] = true;
 				}
 			}
-			// Make the Bird free fall
-			bird.fall();
-			// Check if the Bird hit the ground
-			if (bird.hitBorder()) gameover();
+			// Make the bird free fall
+			birdY += birdSpeed;
+			birdSpeed += GRAVITY;
+			// Check if the bird hit the ground
+			if (birdY + birdH >= GROUND) gameover();
+			// Check if the player get a score
 			checkScore();
 
 			FlappyBird.gamePanel.repaint();
@@ -66,23 +137,23 @@ public class GamePanel extends JPanel {
 	/**
 	 * Check if the Tube collides with the Bird.
 	 *
-	 * @param bird the Bird object to check
+	 * @param tubeIndex the index of the tube to check
 	 * @return true if collide occurs
 	 */
-	private boolean collide(Bird bird, Tube tube) {
-		if (tube.x > bird.x + bird.width || tube.x + tube.width < bird.x) {
+	private boolean collide(int tubeIndex) {
+		if (tubesX[tubeIndex] > birdX + birdW || tubesX[tubeIndex] + tubeW < birdX) {
 			return false;
 		}
-		return (bird.y <= tube.gapY || bird.y + bird.height >= tube.gapY + tube.gapHeight);
+		return (birdY <= tubesGapY[tubeIndex] || birdY + birdH >= tubesGapY[tubeIndex] + tubesGapH[tubeIndex]);
 	}
 
 	/**
 	 * Check if the Bird pass a Tube.
 	 */
 	private void checkScore() {
-		for (Tube tube : tubes) {
-			if (!tube.scored && bird.x + bird.width >= tube.x + tube.width) {
-				tube.scored = true;
+		for (int i = 0; i < 2; i++) {
+			if (!tubesScored[i] && birdX + birdW >= tubesX[i] + tubeW) {
+				tubesScored[i] = true;
 				score++;
 			}
 		}
@@ -90,14 +161,13 @@ public class GamePanel extends JPanel {
 	}
 
 	/**
-	 * When the Bird hits something, the game is over.
 	 * Perform actions after the game is over.
 	 */
 	private void gameover() {
 		motionTimer.stop();
 		scoreLabel.setVisible(false);
-		FlappyBird.frame.changePanel(FlappyBird.gamePanel, FlappyBird.scorePanel);
-		FlappyBird.scorePanel.onShow(score, FlappyBird.gamePanel.createBI());
+		FlappyBird.changePanel(FlappyBird.gamePanel, FlappyBird.scorePanel);
+		FlappyBird.scorePanel.init(score, FlappyBird.gamePanel.createBI());
 	}
 
 	/**
@@ -128,7 +198,8 @@ public class GamePanel extends JPanel {
 						scoreLabel.setText("");
 						scoreLabel.setFont(fontScore);
 					}
-					bird.jump();
+					// Make the bird jump
+					birdSpeed = jumpSpeed;
 				}
 			}
 
@@ -147,11 +218,60 @@ public class GamePanel extends JPanel {
 		scoreLabel.setText("Press SPACE to start");
 		scoreLabel.setFont(fontHint);
 		requestFocusInWindow();
-		tubes = new Tube[]{new Tube(480 + 120), new Tube(480 + 240 + 44 + 120)};
-		bird = new Bird();
 		score = 0;
 		life = 1;
 		started = false;
+		// Set up the bird
+		birdX = 120;
+		birdY = (GROUND - birdH) / 2;
+		birdSpeed = 0;
+		// Set up the tubes
+		for (int i = 0; i < 2; i++) {
+			tubesX[i] = (FlappyBird.W + 120) + i * (FlappyBird.W + tubeW) / 2;
+			tubesGapH[i] = 200;
+			tubesGapY[i] = GameUtil.rand(50, GROUND - tubesGapH[i] - 50);
+			tubesScored[i] = false;
+			tubesCrashed[i] = false;
+		}
+	}
+
+	/**
+	 * Draw the bird on the screen.
+	 *
+	 * @param g the Graphics object to draw on
+	 */
+	private void drawBird(Graphics g) {
+		// TODO: The image of the Bird
+//		g.drawRect(birdX, birdY, birdW, birdH);
+		GameUtil.drawHappyFace(g, birdX, birdY, birdW, birdH);
+	}
+
+	/**
+	 * Draw the tube on the screen.
+	 *
+	 * @param g the Graphics object to draw on
+	 * @param i the index of the tube to draw
+	 */
+	public void drawTube(Graphics g, int i) {
+		// Draw the tubes
+		g.setColor(Color.GREEN);
+		// The upper tube
+		g.fillRect(tubesX[i] + 10, 0, tubeW - 20, tubesGapY[i] - 40);
+		// The nozzle of the upper tube
+		g.fillRect(tubesX[i], tubesGapY[i] - 40, tubeW, 40);
+		// The lower tube
+		g.fillRect(tubesX[i] + 10, tubesGapY[i] + tubesGapH[i] + 40, tubeW - 20, GROUND - (tubesGapY[i] + tubesGapH[i] + 40));
+		// The nozzle of the lower tube
+		g.fillRect(tubesX[i], tubesGapY[i] + tubesGapH[i], tubeW, 40);
+		g.setColor(Color.BLACK);
+		// The upper tube
+		g.drawRect(tubesX[i] + 10, 0, tubeW - 20, tubesGapY[i] - 40);
+		// The nozzle of the upper tube
+		g.drawRect(tubesX[i], tubesGapY[i] - 40, tubeW, 40);
+		// The lower tube
+		g.drawRect(tubesX[i] + 10, tubesGapY[i] + tubesGapH[i] + 40, tubeW - 20, GROUND - (tubesGapY[i] + tubesGapH[i] + 40));
+		// The nozzle of the lower tube
+		g.drawRect(tubesX[i], tubesGapY[i] + tubesGapH[i], tubeW, 40);
 	}
 
 	@Override
@@ -161,13 +281,11 @@ public class GamePanel extends JPanel {
 			offScreenG = offScreenI.getGraphics();
 		}
 		offScreenG.clearRect(0, 0, FlappyBird.W, FlappyBird.H);
-
 		offScreenG.drawImage(FlappyBird.bg, 0, 0, this);
 
-		for (Tube tube : tubes) {
-			tube.draw(offScreenG);
-		}
-		bird.draw(offScreenG);
+		for (int i = 0; i < 2; i++) drawTube(offScreenG, i);
+		drawBird(offScreenG);
+
 		g.drawImage(offScreenI, 0, 0, this);
 	}
 
@@ -176,7 +294,7 @@ public class GamePanel extends JPanel {
 	 *
 	 * @return a BufferedImage of current screen
 	 */
-	public BufferedImage createBI() {
+	private BufferedImage createBI() {
 		BufferedImage bi = new BufferedImage(FlappyBird.W, FlappyBird.H, BufferedImage.TYPE_INT_RGB);
 		Graphics2D g = bi.createGraphics();
 		paint(g);

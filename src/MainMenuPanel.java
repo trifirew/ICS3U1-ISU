@@ -43,7 +43,7 @@ public class MainMenuPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Play");
-				FlappyBird.frame.changePanel(MainMenuPanel.this, FlappyBird.gamePanel);
+				FlappyBird.changePanel(MainMenuPanel.this, FlappyBird.gamePanel);
 				FlappyBird.gamePanel.init();
 			}
 		});

@@ -7,7 +7,10 @@ Flappy Bird
 This is a Flappy Bird game made using JFrame.
  */
 
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 
@@ -17,40 +20,57 @@ import java.io.IOException;
  * @author Keisun, Yitian
  * @since December 20, 2017
  */
-public class FlappyBird {
+public class FlappyBird extends JFrame {
 	/**
 	 * The dimension of the game window
 	 */
 	public static final int W = 480, H = 800;
 
+	// The frame of the game
+	private static FlappyBird frame;
 	// The panels used in the game as different screens
-	public static FlappyBirdFrame frame;
 	public static MainMenuPanel mainMenuPanel;
 	public static GamePanel gamePanel;
 	public static ScorePanel scorePanel;
-
 
 	/**
 	 * Base font of the game, used to derive different sizes
 	 */
 	public static Font fontBase;
-
 	/**
 	 * The background image of the game
 	 */
 	public static Image bg;
 
-	public static void main(String[] args) {
-		frame = new FlappyBirdFrame();
-
-		loadFonts();
-		loadBackground();
-
-		mainMenuPanel = new MainMenuPanel();
-		gamePanel = new GamePanel();
-		scorePanel = new ScorePanel();
-		frame.setVisible(true);
-		frame.showPanel(mainMenuPanel);
+	/**
+	 * Construct a new frame for the game.
+	 */
+	public FlappyBird() {
+		super("Flappy Bird");
+		// Prevent player from changing the size of the window
+		setResizable(false);
+		// Set action when player tries to close the window
+		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				// TODO: Action on window closing
+				String[] options = {"Yes", "No"};
+				int prompt = JOptionPane.showOptionDialog(FlappyBird.this,
+						"Do you really want to exit?", "Exit",
+						JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
+						null,
+						options, options[1]);
+				if (prompt == 0)
+					System.exit(0);
+			}
+		});
+		// Set icon of the window
+		Toolkit tk = Toolkit.getDefaultToolkit();
+		setIconImage(tk.getImage("res/icon.png"));
+		Dimension screenSize = tk.getScreenSize();
+		// Set the size of the window and move it to the centre of the screen
+		setBounds((screenSize.width - W) / 2, (screenSize.height - H) / 2, W, H);
 	}
 
 	/**
@@ -68,6 +88,7 @@ public class FlappyBird {
 
 	/**
 	 * Load the background image of the game.
+	 * Adapted from ConnectFour assignment.
 	 */
 	private static void loadBackground() {
 		MediaTracker tracker = new MediaTracker(frame);
@@ -82,25 +103,37 @@ public class FlappyBird {
 	}
 
 	/**
-	 * Delay for a given number of milliseconds.
+	 * Show a specific panel on the frame.
 	 *
-	 * @param ms time period to delay
+	 * @param panel the panel to show on the frame.
 	 */
-	public static void delay(int ms) {
-		try {
-			Thread.sleep(ms);
-		} catch (InterruptedException ignored) {
-		}
+	public static void showPanel(JPanel panel) {
+		frame.add(panel);
+		frame.pack();
 	}
 
 	/**
-	 * Generate a random integer between a and b inclusively.
+	 * Change from a panel to another panel.
 	 *
-	 * @param a lower bound of the random integer
-	 * @param b higher bound of the random integer
-	 * @return a random integer
+	 * @param close the panel to close
+	 * @param open the panel to open
 	 */
-	public static int rand(int a, int b) {
-		return (int) (Math.random() * (b - a + 1) + a);
+	public static void changePanel(JPanel close, JPanel open) {
+		frame.remove(close);
+		frame.add(open);
+		frame.validate();
+		frame.repaint();
+	}
+
+	public static void main(String[] args) {
+		frame = new FlappyBird();
+		loadFonts();
+		loadBackground();
+
+		mainMenuPanel = new MainMenuPanel();
+		gamePanel = new GamePanel();
+		scorePanel = new ScorePanel();
+		frame.setVisible(true);
+		showPanel(mainMenuPanel);
 	}
 }
