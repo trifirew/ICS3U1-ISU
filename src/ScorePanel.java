@@ -69,7 +69,7 @@ public class ScorePanel extends JPanel {
 	}
 
 	/**
-	 * Action when the panel is shown on screen. Initialize the screen.
+	 * Initialize the screen when it is shown.
 	 */
 	public void init(int score, BufferedImage image) {
 		this.gameImage = image;

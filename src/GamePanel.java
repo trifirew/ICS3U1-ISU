@@ -87,7 +87,7 @@ public class GamePanel extends JPanel {
 	 */
 	private boolean[] tubesCrashed = new boolean[2];
 
-	// Set the Timer for the motion of the Tubes and the Bird
+	// Set the Timer for the motion of the tubes and the bird
 	private Timer motionTimer = new Timer(10, new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -117,6 +117,8 @@ public class GamePanel extends JPanel {
 			// Make the bird free fall
 			birdY += birdSpeed;
 			birdSpeed += GRAVITY;
+			System.out.println(birdY);
+			System.out.println(birdSpeed);
 			// Check if the bird hit the ground
 			if (birdY + birdH >= GROUND) gameover();
 			// Check if the player get a score
@@ -135,7 +137,7 @@ public class GamePanel extends JPanel {
 	}
 
 	/**
-	 * Check if the Tube collides with the Bird.
+	 * Check if the tube collides with the bird.
 	 *
 	 * @param tubeIndex the index of the tube to check
 	 * @return true if collide occurs
@@ -148,7 +150,7 @@ public class GamePanel extends JPanel {
 	}
 
 	/**
-	 * Check if the Bird pass a Tube.
+	 * Check if the bird pass a tube.
 	 */
 	private void checkScore() {
 		for (int i = 0; i < 2; i++) {
@@ -161,7 +163,7 @@ public class GamePanel extends JPanel {
 	}
 
 	/**
-	 * Perform actions after the game is over.
+	 * Perform actions after the player loses the game.
 	 */
 	private void gameover() {
 		motionTimer.stop();
@@ -210,7 +212,7 @@ public class GamePanel extends JPanel {
 	}
 
 	/**
-	 * Action when the panel is shown on screen. Initialize the screen.
+	 * Initialize the screen when it is shown.
 	 */
 	public void init() {
 		// Display score when playing

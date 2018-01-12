@@ -81,7 +81,9 @@ public class FlappyBird extends JFrame {
 			fontBase = Font.createFont(Font.TRUETYPE_FONT, new File("res/minecraftia.ttf"));
 			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 			ge.registerFont(fontBase);
-		} catch (FontFormatException | IOException e) {
+		} catch (FontFormatException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
