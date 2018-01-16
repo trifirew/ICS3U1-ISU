@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eclipse-userlibraries>
+  <library name="Python 3.6 (PythonPlayground) interpreter library">
+    <archive path="C:/Program Files/Python36/DLLs" />
+    <archive path="C:/Program Files/Python36/Lib" />
+    <archive path="C:/Program Files/Python36" />
+    <archive path="D:/workspace/PythonPlayground/venv" />
+    <archive path="D:/workspace/PythonPlayground/venv/Lib/site-packages" />
+    <archive path="D:/workspace/PythonPlayground/venv/Lib/site-packages/setuptools-28.8.0-py3.6.egg" />
+    <archive path="D:/workspace/PythonPlayground/venv/Lib/site-packages/pip-9.0.1-py3.6.egg" />
+    <archive path="C:/Users/wuqsw/.IntelliJIdea2017.3/system/python_stubs/1974937114" />
+    <archive path="C:/Users/wuqsw/.IntelliJIdea2017.3/config/plugins/python/helpers/python-skeletons" />
+    <archive path="C:/Users/wuqsw/.IntelliJIdea2017.3/config/plugins/python/helpers/typeshed/stdlib/3.6" />
+    <archive path="C:/Users/wuqsw/.IntelliJIdea2017.3/config/plugins/python/helpers/typeshed/stdlib/3.5" />
+    <archive path="C:/Users/wuqsw/.IntelliJIdea2017.3/config/plugins/python/helpers/typeshed/stdlib/3.4" />
+    <archive path="C:/Users/wuqsw/.IntelliJIdea2017.3/config/plugins/python/helpers/typeshed/stdlib/3.3" />
+    <archive path="C:/Users/wuqsw/.IntelliJIdea2017.3/config/plugins/python/helpers/typeshed/stdlib/3" />
+    <archive path="C:/Users/wuqsw/.IntelliJIdea2017.3/config/plugins/python/helpers/typeshed/stdlib/2and3" />
+    <archive path="C:/Users/wuqsw/.IntelliJIdea2017.3/config/plugins/python/helpers/typeshed/third_party/3" />
+    <archive path="C:/Users/wuqsw/.IntelliJIdea2017.3/config/plugins/python/helpers/typeshed/third_party/2and3" />
+  </library>
+  <library name="Python 3.6.3 (C:\Program Files\Python36\python.exe) interpreter library">
+    <archive path="C:/Program Files/Python36/DLLs" />
+    <archive path="C:/Program Files/Python36/Lib" />
+    <archive path="C:/Program Files/Python36" />
+    <archive path="C:/Program Files/Python36/Lib/site-packages" />
+    <archive path="C:/Users/wuqsw/.IntelliJIdea2017.2/system/python_stubs/-1120166012" />
+    <archive path="C:/Users/wuqsw/.IntelliJIdea2017.3/config/plugins/python/helpers/python-skeletons" />
+    <archive path="C:/Users/wuqsw/.IntelliJIdea2017.3/config/plugins/python/helpers/typeshed/stdlib/3.6" />
+    <archive path="C:/Users/wuqsw/.IntelliJIdea2017.3/config/plugins/python/helpers/typeshed/stdlib/3.5" />
+    <archive path="C:/Users/wuqsw/.IntelliJIdea2017.3/config/plugins/python/helpers/typeshed/stdlib/3.4" />
+    <archive path="C:/Users/wuqsw/.IntelliJIdea2017.3/config/plugins/python/helpers/typeshed/stdlib/3.3" />
+    <archive path="C:/Users/wuqsw/.IntelliJIdea2017.3/config/plugins/python/helpers/typeshed/stdlib/3" />
+    <archive path="C:/Users/wuqsw/.IntelliJIdea2017.3/config/plugins/python/helpers/typeshed/stdlib/2and3" />
+    <archive path="C:/Users/wuqsw/.IntelliJIdea2017.3/config/plugins/python/helpers/typeshed/third_party/3" />
+    <archive path="C:/Users/wuqsw/.IntelliJIdea2017.3/config/plugins/python/helpers/typeshed/third_party/2and3" />
+  </library>
+</eclipse-userlibraries>
+
