@@ -43,7 +43,7 @@ public class MainMenuPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Play");
-				FlappyBird.changePanel(MainMenuPanel.this, FlappyBird.gamePanel);
+				FlappyBird.changePanel(FlappyBird.mainMenuPanel, FlappyBird.gamePanel);
 				FlappyBird.gamePanel.init();
 			}
 		});
@@ -52,6 +52,7 @@ public class MainMenuPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				// TODO: Leaderboard screen
 				System.out.println("Leaderboard");
+				FlappyBird.changePanel(FlappyBird.mainMenuPanel, FlappyBird.leaderboardPanel);
 			}
 		});
 

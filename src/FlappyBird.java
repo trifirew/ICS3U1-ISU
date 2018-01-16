@@ -32,6 +32,7 @@ public class FlappyBird extends JFrame {
 	public static MainMenuPanel mainMenuPanel;
 	public static GamePanel gamePanel;
 	public static ScorePanel scorePanel;
+	public static LeaderboardPanel leaderboardPanel;
 
 	/**
 	 * Base font of the game, used to derive different sizes
@@ -135,6 +136,7 @@ public class FlappyBird extends JFrame {
 		mainMenuPanel = new MainMenuPanel();
 		gamePanel = new GamePanel();
 		scorePanel = new ScorePanel();
+		leaderboardPanel = new LeaderboardPanel();
 		frame.setVisible(true);
 		showPanel(mainMenuPanel);
 	}
